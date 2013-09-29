@@ -1,0 +1,152 @@
+body {background-color:#6495ed;}
+
+#windowContainer{
+	/*background-color:blue;
+	position:absolute;
+	width: 1000px;
+	height: 1000px;
+	*/
+}
+
+.window { 
+	opacity:0.8; 
+	filter:alpha(opacity=80); 
+	z-index:20; 
+	position:absolute; 
+	/*position:relative;*/
+	color:black;
+	font-family:helvetica, sans;
+	text-align:center;
+	background-color:white;
+	opacity:0.85;
+	border:0.4em dotted white; 
+	border-radius:8px;
+	padding:0.1em; 
+}
+.window_zoom1 { 
+	width:18em; 
+	min-height:4em; 
+	font-size:0.9em;
+}
+.window_zoom2 { 
+	width:16em; 
+	min-height:4em; 
+	font-size:0.7em;
+}
+.window_zoom3 { 
+	width:14em; 
+	min-height:4em; 
+	font-size:0.5em;
+}
+.window_zoom4 { 
+	width:10em; 
+	min-height:4em; 
+	font-size:0.4em;
+}
+
+.img_zoom1{
+	max-width:18em;
+	max-height:18em;
+}
+.img_zoom2{
+	max-width:16em;
+	max-height:16em;
+}
+.img_zoom3{
+	max-width:14em;
+	max-height:14em;
+}
+.img_zoom4{
+	max-width:10em;
+	max-height:10em;
+}
+
+
+
+
+.window:hover {
+	opacity:0.99;
+	border-style:solid;
+	border-color:orange;
+	z-index:2000;
+	cursor:pointer;
+	
+}
+.window h1{
+	color:SteelBlue;
+	margin: 0px;
+}
+.window h2{
+	text-align:left;
+	font-size:0.9em;
+	margin: 0px;
+	background-color:SteelBlue;
+	color:white;
+}
+.window p{
+	text-align:left;
+	margin: 2px;
+	font-size:0.9em;
+	cursor:text;
+
+}
+
+
+
+.scrollBarY {
+	max-height: 100px;
+	overflow-y: scroll;
+}
+.cButton{
+	text-align:left;
+	margin:0px;
+}
+.cButton:hover{
+	display:inline
+}
+.cButtonD1{
+	width:6px;
+	height:6px;
+	margin-left:5px;
+}
+.cButtonD2{
+	width:8px;
+	height:8px;
+	margin-left:5px;
+}
+.cButtonD3{
+	width:10px;
+	height:10px;
+	margin-left:5px;
+}
+.cButtonClose{
+	float:right;
+	width:10px;
+	height:10px;
+	margin-right:5px;
+}
+
+.linkHoverStart{
+	color:yellow;
+	border:red;
+}
+
+.linkHoverStop{
+	strokeStyle:gray;
+	fillStyle:gray;
+}
+
+.debugId{
+	display:none;
+	/*display:block;*/
+}
+
+img{
+	border-radius:4px;
+}
+
+#window1 { left:35em;top:1em;}
+#window5 { left:65em;top:1em;}
+#window6 { left:70em;top:26em;}
+
+

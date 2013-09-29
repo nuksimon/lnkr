@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+	<head>
+		<title>LNKR UI Model</title>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<link rel="stylesheet" href="css/lnkr.UI_Model.css">
+	</head>
+	<body data-demo-id="chartDemo" data-library="jquery">
+
+		<form id="searchForm">
+			<input type="text" name="search" id="searchFormText" value="Cat">
+			<input type="button" id="searchFormButton" onclick="createWindowFromSearch()" value="Search">
+		</form>
+		
+		<select  id="dropSource" onchange="updateAutocomplete()">
+			<option value=""> -- data source -- </option>
+		</select>
+		
+		<img onclick='display1_all();' class="cButtonD1" src="img/circle-icon.png" />
+		<img onclick='display2_all();' class="cButtonD2" src="img/circle-icon.png" />
+		<img onclick='display3_all();' class="cButtonD3" src="img/circle-icon.png" />
+		
+		
+		<div id="demo">
+			<div class="window  window_zoom1" id="window1" onmouseover="hoverLinkStart($(this))" onmouseout="hoverLinkStop($(this))">
+				<h1> Test Window </h1>
+				<p> test new connections here </p>
+			</div>
+			
+			
+			
+			<div class="window  window_zoom1" id="window5" onmouseover="hoverLinkStart($(this))" onmouseout="hoverLinkStop($(this))">
+				<div class='cButton'>
+					<img onclick='display1($(this).parents(".window"));' class="cButtonD1" src="img/circle-icon.png" />
+					<img onclick='display2($(this).parents(".window"));' class="cButtonD2" src="img/circle-icon.png" />
+					<img onclick='display3($(this).parents(".window"));' class="cButtonD3" src="img/circle-icon.png" />
+					<img class='cButtonClose' onclick='closeWindow($(this).parents(".window"));' width="10" height="10" src="img/Button_Icon_Red.svg.png" />
+				</div>
+				<p></p>
+				<div class='cImage display2'>
+					<img id='img5' class='cImage img_zoom1' src="img/img2.jpg" />
+				</div>
+				<h1> Test Cat #1 </h1>
+				<div class='display3'>
+					<h2 onclick='displaySummary($(this).parents(".window"));'>Summary</h2>
+					<div class='cSummary scrollBarY'>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+					</div>
+					<h2 onclick='displayLinks($(this).parents(".window"));'>Links</h2>
+					<div class='cLinks scrollBarY'>
+						<p>link 1</p><p>link 2</p><p>link 3</p><p>link 4</p><p>link 5</p><p>link 6</p><p>link 7</p><p>link 8</p><p>link 9</p>
+					</div>
+				</div>
+			</div>
+		
+			
+			
+			
+			<div class="window  window_zoom1" id="window6" onmouseover="hoverLinkStart($(this))" onmouseout="hoverLinkStop($(this))">
+				<div class='cButton'>
+					<img onclick='display1($(this).parents(".window"));' class="cButtonD1" src="img/circle-icon.png" />
+					<img onclick='display2($(this).parents(".window"));' class="cButtonD2" src="img/circle-icon.png" />
+					<img onclick='display3($(this).parents(".window"));' class="cButtonD3" src="img/circle-icon.png" />
+					<img class='cButtonClose' onclick='closeWindow($(this).parents(".window"));' width="10" height="10" src="img/Button_Icon_Red.svg.png" />
+				</div>
+				<p></p>
+				<div class='cImage display2'>
+					<img id='img6' class='cImage img_zoom1' src="img/img3.jpg" />
+				</div>
+				<h1> Test Cat #2 </h1>
+				<div class='display3'>
+					<h2 onclick='displaySummary($(this).parents(".window"));'>Summary</h2>
+					<div class='cSummary scrollBarY'>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+						<p> body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text body text</p>
+					</div>
+					<h2 onclick='displayLinks($(this).parents(".window"));'>Links</h2>
+					<div class='cLinks scrollBarY'>
+						<p>link 1</p><p>link 2</p><p>link 3</p><p>link 4</p><p>link 5</p><p>link 6</p><p>link 7</p><p>link 8</p><p>link 9</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		
+		
+		
+		
+		
+		<!-- ---------------------  Java Script ---------------------------------------------  -->
+		
+		
+		<!--  libraries -->
+	    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'></script>
+		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js'></script>
+		<script type='text/javascript' src='js/jquery.ui.touch-punch.min.js'></script>		
+		<script type='text/javascript' src='js/jquery.jsPlumb-1.3.16-all-min.js'></script>
+		
+		<!-- autocomplete -->
+		<script type="text/javascript" src="js/jquery.autocomplete.pack.js"></script>
+		<link rel="stylesheet" href="css/jquery.autocomplete.css" type="text/css" />
+
+		
+		
+		<!--  UI code -->
+		<script type="text/javascript" src="js/lnkr.UI_Model.js"></script>	
+		<script type="text/javascript" src="js/lnkr.UI_Zoom.js"></script>
+		
+		<!-- Parser -->
+		<script type="text/javascript" src="js/lnkr.parse.js"></script>
+		
+		<!-- Data Sources -->
+		<script type="text/javascript" src="js/lnkr.Data_Source.js"></script>
+		<script type="text/javascript">
+			$(document).ready(getSourceList());
+			var data_source_id
+			var data_source_url
+		</script>
+		
+		
+		<!-- Test Display -->
+		<script type="text/javascript">
+			$(document).ready(display2($('#window5')));
+			$(document).ready(display2($('#window6')));
+
+		</script>
+
+	</body>
+</html>

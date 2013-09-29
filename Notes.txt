@@ -1,0 +1,40 @@
+Notes:
+
+Search Name using Source
+
+If Name & Source are in db
+Then assign ID
+else create ID and Add to Article table
+
+Query for Links using ID
+Add Links to object
+
+
+on new window, check if existing articles link to it
+
+
+
+
+
+------------------------------------------------------------
+
+Parser:
+
+Stage
+1 find and count links
+2 dump to db
+3 special cases
+4 test scripting
+5 weighting algorithm
+
+
+1 
+input - wiki search term
+load html via api (filter article only)
+remove "References" section							<--------------
+for each hyperlink
+	add to array
+	count++
+for each word matching a hyperlink
+	count++
+output - array contents (hyperlink + counts)
