@@ -1,3 +1,13 @@
+/*
+	Functions related to parsing the link data from an article
+	
+	Author: Simon Nuk
+*/
+
+
+// ----------------- TEST functions not used in main code ----------------------------------------------
+
+//TEST function: main
 function runSearch()
 {
 	var dataSource = "http://en.wikipedia.org";	
@@ -18,13 +28,9 @@ function runSearch()
 	}
 	
 	//alert("runSearch");
-
 };
 
-
-
-
-//dump data to html for testing
+//TEST function: dump link data to html
 function testParseDumpLink(arrLink, articleTitle) {
 	
 	//Append the results to the body
@@ -40,7 +46,7 @@ function testParseDumpLink(arrLink, articleTitle) {
 
 };
 
-//dump data to html for testing
+//TEST function: dump article data to html
 function testParseDumpArticle(wikipage) {
 	
 	//Append Article to the body
@@ -49,18 +55,11 @@ function testParseDumpArticle(wikipage) {
 
 };
 
-
-
-
-
-
-//search for an article using the API
+//TEST function: search for an article using the API
 function searchArticle(dataSource, windowTitle)
 {
 	
 	var startTime = new Date().getTime();
-	
-	
 	var windowBody = "";	//add all body elements to this var
 	
 	//wiki search api
@@ -87,25 +86,47 @@ function searchArticle(dataSource, windowTitle)
 		//dump data to test HTML page
 		testParseDumpArticle($('<div>'+data.parse.text['*']+'</div>'));
 		testParseDumpLink(arrLink, articleTitle);
-		
-		
+				
 		var statsRow = '<tr><td>' + articleTitle + '</td><td>' + arrLink.length + '</td><td>' + (apiTime - startTime) + '</td><td>' + (endTime - apiTime)
 					+ '</td><td>' + (endTime - startTime) +  '</td></tr>';
-		$('#statsTable').append(statsRow);
-		
-	});
-	
+		$('#statsTable').append(statsRow);	
+	});	
 };
 
 
 
 
 
-//Parse the links in the article
+
+
+// ----------------- Parse Functions ----------------------------------------------------
+
+
+/*Parse the links in the article
+	INPUTS
+		-article = HTML content of the article
+		-dataSource = URL of the dataSource
+	OUTPUT
+		-arrLink = array of hyperlinks found in the article, weighted by relevance
+*/
 function parseArticle(article, dataSource)
 {
+	/* objLink = object that stores the link's scores and weight
+			-name = link's name
+			-url = link's url
+			-count_link = # times found as a hyperlink
+			-count_text = # times found as plain text
+			-count_p1 = # times found in the first paragraph
+			-count_p2 = # times found between the 2nd paragraph and Table of Contents
+			-count_infobox = # times found in the info box
+			-count_nav_box = # times found in the nav box
+			-weight = calculated weight (relevance) based on the above parameters
+		
+		arrLink = array of objLinks
+	*/
 	var objLink;
 	var arrLink = [];
+	
 	var linkTitle = "";
 	var linkURL = "";
 
@@ -225,17 +246,11 @@ function parseArticle(article, dataSource)
 
 
 
-
-
-
-
-
-
-
 //add an escape to each special character in the regexp
 function escapeRegExp(str) {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 };
+
 
 
 //calculate the weight of each link
@@ -264,6 +279,7 @@ function runLinkWeight(arrLink)
 	//sort the array by the weight field
 	arrLink.sort(SortByWeight);
 };
+
 
 
 //sort the "weight" field in the array of links

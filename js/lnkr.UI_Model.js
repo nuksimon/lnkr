@@ -61,22 +61,22 @@ jsPlumb.bind("ready", function() {
 //action from Search box to get a new article
 function createWindowFromSearch()
 {
-	//get the data source and id from the drop menu
-	var dataSourceId = $('#dropSource option:selected').attr('value');	
-	var dataSource = $('#dropSource option:selected').text();	
-
+	//get the data source from the drop menu
+	var dataSourceName = $('#dropSource option:selected').text();	
+	var dataSource = getSourceURL(dataSourceName);
+	
 	//get the article title from the search box
 	var windowTitle = document.getElementById('searchFormText').value;
 
 	//create the new window
-	createWindow(dataSourceId, dataSource, windowTitle);
+	createWindow(dataSource, windowTitle);
 }
 
 
 
 
 //makes a new window with an article
-function createWindow(dataSourceId, dataSource, windowTitle)
+function createWindow(dataSource, windowTitle)
 {
 	//setup the new window object for the DOM
 	var newWindowId = 'window' + newWindowCount;
@@ -111,10 +111,8 @@ function createWindow(dataSourceId, dataSource, windowTitle)
 	
 	//Add Data Source info
 	windowBody += '<div class="debugId dataSource">' + dataSource + '</div>';
-	windowBody += '<div class="debugId dataSourceId">' + dataSourceId + '</div>';
 	
 	//Add test info
-	windowBody += '<p class="debugId">Data Source Id: ' + dataSourceId + '</p>';
 	windowBody += '<p class="debugId">Article Name: ' + windowTitle + '</p>';	
 	windowBody += '<p class="debugId">Window Id: ' + newWindow.id + '</p>';
 	
@@ -134,7 +132,8 @@ function createWindow(dataSourceId, dataSource, windowTitle)
 	
 	
 	//wiki search api
-	var url = dataSource + "/w/api.php?action=parse&format=json&callback=?";
+	//ex: url = "http://en.wikipedia.org" + "/w/api.php" + "?action=parse&format=json&callback=?";
+	var url = dataSource + getSourceAPIfromURL(dataSource) + "?action=parse&format=json&callback=?";
 	
 	//get the full article
 	$.getJSON(url, { 
@@ -161,8 +160,6 @@ function createWindow(dataSourceId, dataSource, windowTitle)
 		});
 		
 	
-		//get the article id from the database, process links
-		//getArticleId(dataSourceId, windowTitle, newWindow.id);
 		
 		// parse first paragraph
 		wikipage = $('<div>'+data.parse.text['*']+'</div>').children('p:first');
@@ -301,7 +298,7 @@ function hoverLinkStop(el)
 
 
 //---------------- link processing -------------------------------------
-
+/*
 //return the articleID from the db and append it to the window
 //also get the links and append to the window
 function getArticleId(source_id, name, window_id){
@@ -352,7 +349,7 @@ function getLinks(article_id, window_id){
 	
 };
 
-
+*/
 
 //toggle links on click using the article name.  create a new window if it does not exist
 function toggleLinksByName(articleName, destArticleName, window_id){
@@ -363,8 +360,7 @@ function toggleLinksByName(articleName, destArticleName, window_id){
 	if (foundArticle == false){
 		//article does not exist on the screen, we should add it to the screen
 		var dataSource = $('#'+window_id).find('.dataSource').text();
-		var dataSourceId = $('#'+window_id).find('.dataSourceId').text();
-		createWindow(dataSourceId, dataSource, destArticleName);
+		createWindow(dataSource, destArticleName);
 	}
 	
 };
