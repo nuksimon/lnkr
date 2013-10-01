@@ -20,11 +20,11 @@ jsPlumb.bind("ready", function() {
 			jsPlumb.importDefaults({
 				// notice the 'curviness' argument to this Bezier curve.  the curves on this page are far smoother
 				// than the curves on the first demo, which use the default curviness value.			
-				Connector : [ "Bezier", { curviness:10 } ],
+				Connector : [ "Bezier", { curviness:2 } ],
 				//DragOptions : { cursor: "pointer"},
-				PaintStyle : { strokeStyle:color, lineWidth:5 },
+				PaintStyle : { strokeStyle:color, lineWidth:2 },
 				EndpointStyle : { radius:2, fillStyle:color },
-				HoverPaintStyle : {strokeStyle:"#ec9f2e" },
+				HoverPaintStyle : {strokeStyle:"#ec9f2e", lineWidth:5 },
 				EndpointHoverStyle : {fillStyle:"#ec9f2e" },			
 				Anchors :  [ "BottomCenter", "TopCenter", "LeftMiddle", "RightMiddle" ]
 			});
