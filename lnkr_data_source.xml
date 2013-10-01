@@ -2,25 +2,25 @@
 <root>
 
 	<source>
-		<name>Wikipedia (EN)</name>
+		<name>Wikipedia (en)</name>
 		<url>http://en.wikipedia.org</url>
 		<api>/w/api.php</api>
 	</source>
 
 	<source>
-		<name>Wikipedia (FR)</name>
+		<name>Wikipedia (fr)</name>
 		<url>http://fr.wikipedia.org</url>
 		<api>/w/api.php</api>
 	</source>
 
 	<source>
-		<name>Wikipedia (ES)</name>
+		<name>Wikipedia (es)</name>
 		<url>http://es.wikipedia.org</url>
 		<api>/w/api.php</api>
 	</source>
 
 	<source>
-		<name>Wikipedia (DE)</name>
+		<name>Wikipedia (de)</name>
 		<url>http://de.wikipedia.org</url>
 		<api>/w/api.php</api>
 	</source>

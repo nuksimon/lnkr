@@ -61,18 +61,18 @@ window.addEventListener("mousewheel",function(){
 	else if(zoom_level==2){
 		$('.window').removeClass('window_zoom1 window_zoom3').addClass('window_zoom2');
 		$('.cImage').removeClass('img_zoom1 img_zoom3').addClass('img_zoom2');
-		$('.cButton').css('display', 'inline');
+		//$('.cButton').css('display', 'inline');
 	}
 	else if(zoom_level==3){
 		$('.window').removeClass('window_zoom4 window_zoom2').addClass('window_zoom3');
 		$('.cImage').removeClass('img_zoom4 img_zoom2').addClass('img_zoom3');
-		$('.cButton').css('display', 'none');
+		//$('.cButton').css('display', 'none');
 		display2_all();
 	}
 	else if(zoom_level==4){
 		$('.window').removeClass('window_zoom3 window_zoom2').addClass('window_zoom4');
 		$('.cImage').removeClass('img_zoom3 img_zoom2').addClass('img_zoom4');
-		$('.cButton').css('display', 'none');
+		//$('.cButton').css('display', 'none');
 		display2_all();
 	}
 	

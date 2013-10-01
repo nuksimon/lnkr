@@ -83,8 +83,8 @@ function createWindow(dataSource, windowTitle)
 	var newWindow=document.createElement('div');	//movable window object
 	newWindow.className = 'window  window_zoom' + zoom_level;
 	newWindow.id = newWindowId;
-	newWindow.onmouseover= function() {hoverLinkStart($(this));};
-	newWindow.onmouseout= function() {hoverLinkStop($(this));};
+	newWindow.onmouseover= function() {hoverWindowStart($(this));};
+	newWindow.onmouseout= function() {hoverWindowStop($(this));};
 	var windowBody = "";	//add all body elements to this var
 	
 	
@@ -282,18 +282,24 @@ function displayLinks(el)
 };
 
 
-//------------------------ link hover graphics ----------------------------
-function hoverLinkStart(el)
+//------------------------ Window hover graphics ----------------------------
+function hoverWindowStart(el)
 {
-	//turn on hover colours
+	//turn on link hover colours
 	jsPlumb.select({source:el.attr('id')}).setHover(true);
 	jsPlumb.select({target:el.attr('id')}).setHover(true);
+	
+	//display the buttons
+	$(el).find('.cButton').css('display', 'inline');
 };
 
-function hoverLinkStop(el)
+function hoverWindowStop(el)
 {
 	//turn off hover colours
 	jsPlumb.select().setHover(false);
+	
+	//hide the buttons
+	$(el).find('.cButton').css('display', 'none');
 };
 
 
