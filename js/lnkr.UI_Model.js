@@ -165,9 +165,10 @@ function createWindow(dataSource, windowTitle)
 		wikipage = $('<div>'+data.parse.text['*']+'</div>').children('p:first');
 		wikipage.find('sup').remove();			//removes reference tags
 		wikipage.find('a').each(function() {
-			$(this)			  
-			  .attr('href', dataSource+$(this).attr('href'))	//repoint the links to external wikipedia
-			  .attr('target','wikipedia');
+			//replace hyperlinks with internal links
+			var linkName = $(this).attr('title');
+			var linkText = $(this).html();
+			$(this).replaceWith('<lnk onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ linkName +'&quot;, &quot;'+newWindowId+'&quot;)">' + linkText + '</lnk>');	
 		});
 		//alert($(wikipage).html());
 	
@@ -182,11 +183,13 @@ function createWindow(dataSource, windowTitle)
 		
 		//Append the link results to the body
 		var outputHTML = "<table border=1 >"; 
-		outputHTML += "<tr><th>rank</th><th>weight</th><th>name</th></tr>";
+		outputHTML += "<tr><th>name</th><th>rank</th><th>weight</th></tr>";
 		for (i = 0, l = Math.min(arrLink.length,10); i < l; i++) {
-			outputHTML += '<tr onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ arrLink[i].name +'&quot;, &quot;'+newWindowId+'&quot;)"><td>' 
-						+ (i+1) + "</td><td>" + arrLink[i].weight + "</td>"
-						+ '<td class="linkName">' + arrLink[i].name + "</td></tr>";
+			outputHTML += '<tr onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ arrLink[i].name +'&quot;, &quot;'+newWindowId+'&quot;)">'
+						+ '<td class="linkName">' + arrLink[i].name + "</td>"
+						+ "<td>" + (i+1) + "</td>"
+						+ "<td>" + arrLink[i].weight + "</td>"
+						+ "</tr>";
 			drawLinksByName(arrLink[i].name, newWindowId, false);			//connect internal links to existing windows
 		}
 		outputHTML += "</table>";
@@ -304,58 +307,7 @@ function hoverWindowStop(el)
 
 
 //---------------- link processing -------------------------------------
-/*
-//return the articleID from the db and append it to the window
-//also get the links and append to the window
-function getArticleId(source_id, name, window_id){
-	$.ajax({
-	   url:'lnkr_db_api.php',
-	   type: 'get',
-	   data: 't=getArticleId&s=' + source_id + '&n=' + name,
-	   datatype:'html',
 
-	   success:function(data){			
-			var ArticleData = '<div id=' +data+ ' class=article>';
-			ArticleData += '<p class="debugId">Article Id: ' + data + '</p>';			//print for testing only
-			$('#'+window_id).append(ArticleData); 
-			
-			//add the links
-			getLinks(parseInt(data), window_id);
-	   },
-	   error:function(){
-		  // code for error
-		alert("error");
-	   }
-	 });
-	
-};
-
-
-//return the links for an articleID from the db and append it to the window
-function getLinks(article_id, window_id){
-	$.ajax({
-	   url:'lnkr_db_api.php',
-	   type: 'get',
-	   data: 't=getLinks&q=' + article_id,
-	   datatype:'html',
-
-	   success:function(data){
-			//write the link data to the window
-			$('#'+window_id).find('.cLinks').append(data); 
-			
-			//draw the links
-			drawLinks(article_id, window_id);
-			drawExternalLinks(article_id, window_id);
-	   },
-	   error:function(){
-		  // code for error
-		alert("error");
-	   }
-	 });
-	
-};
-
-*/
 
 //toggle links on click using the article name.  create a new window if it does not exist
 function toggleLinksByName(articleName, destArticleName, window_id){
@@ -364,9 +316,10 @@ function toggleLinksByName(articleName, destArticleName, window_id){
 	foundArticle = drawLinksByName(destArticleName, window_id, true);		//draw the links between the article, toggle if necessary
 	
 	if (foundArticle == false){
-		//article does not exist on the screen, we should add it to the screen
+		//article does not exist on the screen, we should add it to the screen and draw links
 		var dataSource = $('#'+window_id).find('.dataSource').text();
 		createWindow(dataSource, destArticleName);
+		drawLinksByName(destArticleName, window_id, true);	//required for hyperlinks, but not weighted links
 	}
 	
 };

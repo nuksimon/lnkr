@@ -25,23 +25,23 @@ body {background-color:#6495ed;}
 }
 .window_zoom1 { 
 	width:18em; 
-	min-height:4em; 
+	min-height:1em; 
 	font-size:0.9em;
 }
 .window_zoom2 { 
 	width:16em; 
-	min-height:4em; 
+	min-height:1em; 
 	font-size:0.7em;
 }
 .window_zoom3 { 
 	width:14em; 
-	min-height:4em; 
-	font-size:0.5em;
+	min-height:1em; 
+	font-size:0.6em;
 }
 .window_zoom4 { 
 	width:10em; 
-	min-height:4em; 
-	font-size:0.4em;
+	min-height:1em; 
+	font-size:0.6em;
 }
 
 .img_zoom1{
@@ -89,6 +89,11 @@ body {background-color:#6495ed;}
 	font-size:0.9em;
 	cursor:text;
 
+}
+
+.window lnk{
+	color:SteelBlue;
+	cursor:pointer;
 }
 
 
