@@ -147,7 +147,7 @@ function parseArticle(article, dataSource)
 		linkURL = String($(this).attr('href'));
 		if (linkTitle.indexOf("Edit section") < 0 && linkTitle.indexOf("(page does not exist)") < 0 && linkTitle.indexOf("(disambiguation)") < 0 
 			&& linkTitle.indexOf("undefined") != 0 && linkURL.toLowerCase().indexOf(".jpg") < 0 && linkURL.toLowerCase().indexOf(".png") < 0 && linkURL.toLowerCase().indexOf(".svg") < 0 
-			&& linkURL.toLowerCase().indexOf(".jpeg") < 0 && linkTitle.indexOf(":") < 0 && linkTitle != articleTitle) {
+			&& linkURL.toLowerCase().indexOf(".jpeg") < 0 && linkTitle.indexOf(":") < 0 && linkTitle != articleTitle && linkTitle != "e") {
 			
 			var linkFound = false;
 			
