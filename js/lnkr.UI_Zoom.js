@@ -119,14 +119,43 @@ function backgroundDragInit(){
 
 };
 
+var bdStartX = 0;
+var bdStartY = 0;
+
+var bdWindowStartX = 0;
+var bdWindowStartY = 0;
 
 function backgroundDragMouseDown(){
 	//alert("backgroundDragMouseDown");
+	
+	var e = window.event; 
+	//bdStartX = e.clientX;
+	//bdStartY = e.clientY;
+	bdStartX = e.pageX;
+	bdStartY = e.pageY;
+	
+	bdWindowStartX = $('#window1000').position().left;
+	bdWindowStartY = $('#window1000').position().top;
+	
+	$('#footerInfo').html("Left: " + bdStartX + ", Top: " + bdStartY);
+	//alert("s");
+	
+	$('#background').mousemove(backgroundDragMouseMove);
 
 };
 
 function backgroundDragMouseUp(){
 	//alert("backgroundDragMouseUp");
+	
+	//$('#background').mousemove(null);
+	$('#background').unbind("mousemove");
 
 };
 
+function backgroundDragMouseMove(){
+	var e = window.event;
+	
+	$('#footerInfo').html("Left: " + (bdStartX - e.pageX) + ", Top: " + (bdStartY - e.pageY));
+	$('#window1000').offset({left: bdWindowStartX + bdStartX - e.clientX, top: bdWindowStartY + bdStartY - e.clientY});
+
+};
