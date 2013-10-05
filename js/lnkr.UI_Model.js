@@ -233,22 +233,26 @@ function findWindowPosition(sourceWindowId)
 			top: 80
 		};
 	
-	
+	var pxLeft = 300;
+	var pxTop = 450;
+	var spaceLeft = new Array(pxLeft, pxLeft, 0, -1*pxLeft, -1*pxLeft, -1*pxLeft, 0, pxLeft);
+	var spaceTop = new Array(0, pxTop, pxTop, pxTop, 0, -1*pxTop, -1*pxTop, -1*pxTop);
 	
 	
 	
 	if (sourceWindowId != 0){
-		//var pos = $('#'+sourceWindowId).attr('style');
-		//alert( pos);
-		
+
+		//get the position from the source
 		var pos = $('#'+sourceWindowId).position();
-		//alert (pos2.left);
-		windowPos.left = pos.left + 300;
-		windowPos.top = pos.top;
+		windowPos.left = pos.left + spaceLeft[0];
+		windowPos.top = pos.top + spaceTop[0];
 		
-		if(isWindowOverlap(windowPos.top,windowPos.left)){
-			windowPos.left = pos.left + 300;
-			windowPos.top = pos.top + 450;
+		//check if the spot is filled, try the next spot if it is
+		var i = 1
+		while (isWindowOverlap(windowPos.top,windowPos.left) == true && i < 8){
+			windowPos.left = Math.max(pos.left + spaceLeft[i],0);
+			windowPos.top = Math.max(pos.top + spaceTop[i],0);
+			i++;
 		}
 	}
 	return windowPos;
@@ -268,6 +272,7 @@ function isWindowOverlap(top,left)
 	{
 		var pos = $(this).position();
 		//alert(left + ", " + top + "\n" + pos.left + ", " + pos.top);
+		//search in the rectangle (sizeLeft x sizeTop) below the top left corner
 		if( (left >= pos.left && left <= pos.left + sizeLeft && top >= pos.top && top <= pos.top + sizeTop) ||
 			(pos.left >= left && pos.left <= left + sizeLeft && pos.top >= top && pos.top <= top + sizeTop) ) {
 				overlap = true;  //windows overlap 
