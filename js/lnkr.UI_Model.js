@@ -39,11 +39,11 @@ jsPlumb.bind("ready", function() {
 				];
 			
 			//setup the demo connections
+			/*
 			jsPlumb.connect({source:"window1", target:"window6", anchor:"AutoDefault", detachable:false, reattach:true});
-
-
 			jsPlumb.connect({source:"window6", target:"window5", anchor:"AutoDefault", detachable:false, reattach:true});
 			jsPlumb.connect({source:"window1", target:"window5", anchor:"AutoDefault", detachable:false, reattach:true});
+			*/
 			
 			//enable draggable on the entire class
 			jsPlumb.draggable(jsPlumb.getSelector(".window"), { cancel: '.scrollBarY' });
@@ -69,15 +69,21 @@ function createWindowFromSearch()
 	var windowTitle = document.getElementById('searchFormText').value;
 
 	//create the new window
-	createWindow(dataSource, windowTitle);
+	createWindow(dataSource, windowTitle, 0);
 }
 
 
 
 
 //makes a new window with an article
-function createWindow(dataSource, windowTitle)
+function createWindow(dataSource, windowTitle, sourceWindowId)
 {
+	/*
+		dataSource = Data Source URL, eg: http://en.wikipedia.org
+		windowTitle = Window/Article name from search or link
+		sourceWindowId = WindowId of the window you clicked the link from. 0 if from Search
+	*/
+	
 	//setup the new window object for the DOM
 	var newWindowId = 'window' + newWindowCount;
 	var newWindow=document.createElement('div');	//movable window object
@@ -88,10 +94,21 @@ function createWindow(dataSource, windowTitle)
 	var windowBody = "";	//add all body elements to this var
 	
 	
+	//find an available position on the screen
+	var windowPos = findWindowPosition(sourceWindowId);
+	newWindow.style.left = windowPos.left+"px";
+	newWindow.style.top = windowPos.top+"px";
+	
+	
+	
 	//add the new window to the DOM
 	document.body.appendChild(newWindow);
 	jsPlumb.draggable(jsPlumb.getSelector('.window'), { cancel: '.scrollBarY' });	//refresh the draggable property
 	newWindowCount = newWindowCount + 1				//increment window counter
+	
+	
+	
+	
 	
 	//Add Buttons
 	windowBody += '<div class="cButton">';
@@ -129,6 +146,9 @@ function createWindow(dataSource, windowTitle)
 	
 	//Append to the Window Element
 	$('#'+newWindowId).append(windowBody);
+	
+	
+	
 	
 	
 	//wiki search api
@@ -201,6 +221,30 @@ function createWindow(dataSource, windowTitle)
 	
 
 };
+
+
+//------------------------- Position ---------------------------------------------------
+
+function findWindowPosition(sourceWindowId)
+{
+	var windowPos = {
+			left: 20,
+			top: 80
+		};
+		
+	if (sourceWindowId != 0){
+		//var pos = $('#'+sourceWindowId).attr('style');
+		//alert( pos);
+		
+		var pos = $('#'+sourceWindowId).position();
+		//alert (pos2.left);
+		windowPos.left = pos.left + 300;
+		windowPos.top = pos.top;
+	}
+	return windowPos;
+
+}
+
 
 
 //------------------------- Buttons ----------------------------------------------------
@@ -318,7 +362,7 @@ function toggleLinksByName(articleName, destArticleName, window_id){
 	if (foundArticle == false){
 		//article does not exist on the screen, we should add it to the screen and draw links
 		var dataSource = $('#'+window_id).find('.dataSource').text();
-		createWindow(dataSource, destArticleName);
+		createWindow(dataSource, destArticleName, window_id);
 		drawLinksByName(destArticleName, window_id, true);	//required for hyperlinks, but not weighted links
 	}
 	
