@@ -227,11 +227,16 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 
 function findWindowPosition(sourceWindowId)
 {
+	//default value from search
 	var windowPos = {
 			left: 20,
 			top: 80
 		};
-		
+	
+	
+	
+	
+	
 	if (sourceWindowId != 0){
 		//var pos = $('#'+sourceWindowId).attr('style');
 		//alert( pos);
@@ -240,9 +245,36 @@ function findWindowPosition(sourceWindowId)
 		//alert (pos2.left);
 		windowPos.left = pos.left + 300;
 		windowPos.top = pos.top;
+		
+		if(isWindowOverlap(windowPos.top,windowPos.left)){
+			windowPos.left = pos.left + 300;
+			windowPos.top = pos.top + 450;
+		}
 	}
 	return windowPos;
 
+}
+
+//check all windows to see if they overlap with the coordinates
+function isWindowOverlap(top,left)
+{
+	//area to check for existing windows
+	var sizeLeft = 290;
+	var sizeTop = 380;
+	
+	var overlap = false
+	
+	$('.window').each(function()
+	{
+		var pos = $(this).position();
+		//alert(left + ", " + top + "\n" + pos.left + ", " + pos.top);
+		if( (left >= pos.left && left <= pos.left + sizeLeft && top >= pos.top && top <= pos.top + sizeTop) ||
+			(pos.left >= left && pos.left <= left + sizeLeft && pos.top >= top && pos.top <= top + sizeTop) ) {
+				overlap = true;  //windows overlap 
+			}
+	});
+	
+	return overlap;
 }
 
 
