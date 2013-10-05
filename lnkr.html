@@ -6,19 +6,32 @@
 		<link rel="stylesheet" href="css/lnkr.UI_Model.css">
 	</head>
 	<body data-demo-id="chartDemo" data-library="jquery">
-
-		<form id="searchForm">
-			<input type="text" name="search" id="searchFormText" value="Cat">
-			<input type="button" id="searchFormButton" onclick="createWindowFromSearch()" value="Search">
-		</form>
 		
-		<select  id="dropSource" onchange="updateAutocomplete()">
+		<div id="contentWrapper">
+			<div id="header">
+				
+				<form id="searchForm">
+					<input type="text" name="search" id="searchFormText" value="Cat">
+					<input type="button" id="searchFormButton" onclick="createWindowFromSearch()" value="Search">
+				</form>
+				
+				<select  id="dropSource" onchange="updateAutocomplete()">
+					
+				</select>
+				
+				<img onclick='display1_all();' class="cButtonD1" src="img/circle-icon.png" />
+				<img onclick='display2_all();' class="cButtonD2" src="img/circle-icon.png" />
+				<img onclick='display3_all();' class="cButtonD3" src="img/circle-icon.png" />
+				
+			</div>
 			
-		</select>
-		
-		<img onclick='display1_all();' class="cButtonD1" src="img/circle-icon.png" />
-		<img onclick='display2_all();' class="cButtonD2" src="img/circle-icon.png" />
-		<img onclick='display3_all();' class="cButtonD3" src="img/circle-icon.png" />
+			<div id="background">
+				<div id="backgroundFill"></div>
+			</div>
+			<div id="footer">
+				<div>footer</div>
+			</div>
+		</div>
 		
 		<!--  Test Windows
 		<div id="demo">
@@ -114,6 +127,10 @@
 		<!--  UI code -->
 		<script type="text/javascript" src="js/lnkr.UI_Model.js"></script>	
 		<script type="text/javascript" src="js/lnkr.UI_Zoom.js"></script>
+		<script type="text/javascript">
+			$(document).ready(backgroundDragInit());
+		</script>
+		
 		
 		<!-- Parser -->
 		<script type="text/javascript" src="js/lnkr.parse.js"></script>
@@ -125,6 +142,7 @@
 			var data_source_id
 			var data_source_url
 		</script>
+		
 		
 		
 		<!-- Test Display --

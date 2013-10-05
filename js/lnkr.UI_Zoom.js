@@ -109,3 +109,24 @@ function zoom_out(){
 	 
 };
 */
+
+
+
+//------------------- Background Drag ----------------------------------------------
+function backgroundDragInit(){
+	$('#background').mousedown(backgroundDragMouseDown);
+	$('#background').mouseup(backgroundDragMouseUp);
+
+};
+
+
+function backgroundDragMouseDown(){
+	//alert("backgroundDragMouseDown");
+
+};
+
+function backgroundDragMouseUp(){
+	//alert("backgroundDragMouseUp");
+
+};
+
