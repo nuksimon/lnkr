@@ -114,48 +114,68 @@ function zoom_out(){
 
 //------------------- Background Drag ----------------------------------------------
 function backgroundDragInit(){
+	//map the event handlers to the DOM element
 	$('#background').mousedown(backgroundDragMouseDown);
 	$('#background').mouseup(backgroundDragMouseUp);
-
 };
 
-var bdStartX = 0;
+//global var for mouse starting position on a background drag event
+var bdStartX = 0;	
 var bdStartY = 0;
 
-var bdWindowStartX = 0;
-var bdWindowStartY = 0;
+//global array for all window elements' starting position and ids
+var bdWindowStart = [];
 
+
+//Dragging starts: collect starting positions and place them in global variables
 function backgroundDragMouseDown(){
-	//alert("backgroundDragMouseDown");
 	
+	//capture mouse event starting position
 	var e = window.event; 
-	//bdStartX = e.clientX;
-	//bdStartY = e.clientY;
-	bdStartX = e.pageX;
-	bdStartY = e.pageY;
+	bdStartX = e.pageX;		//mouse start left/x
+	bdStartY = e.pageY;		//mouse start top/y
 	
-	bdWindowStartX = $('#window1000').position().left;
-	bdWindowStartY = $('#window1000').position().top;
+	//grab the id's and starting positions for all active windows
+	$('.window').each(function() {
+		var windowId = $(this).attr('id');
+		var bdWindowStartObj = {
+				id: windowId,
+				x: $('#'+windowId).position().left,
+				y: $('#'+windowId).position().top
+			};
+		bdWindowStart.push(bdWindowStartObj);	//place the data in an object and add it to the global array
+	});
 	
+	//TEST: write offset data to the footer
 	$('#footerInfo').html("Left: " + bdStartX + ", Top: " + bdStartY);
-	//alert("s");
 	
+	//enable the drag event
 	$('#background').mousemove(backgroundDragMouseMove);
-
 };
 
+
+//Dragging stop: perform cleanup tasks
 function backgroundDragMouseUp(){
-	//alert("backgroundDragMouseUp");
 	
-	//$('#background').mousemove(null);
-	$('#background').unbind("mousemove");
-
+	$('#background').unbind("mousemove");	//disable the drag event
+	bdWindowStart = [];						//empty the array of start positions
+	jsPlumb.repaintEverything();		//redraw the links
 };
 
-function backgroundDragMouseMove(){
-	var e = window.event;
-	
-	$('#footerInfo').html("Left: " + (bdStartX - e.pageX) + ", Top: " + (bdStartY - e.pageY));
-	$('#window1000').offset({left: bdWindowStartX + bdStartX - e.clientX, top: bdWindowStartY + bdStartY - e.clientY});
 
+//Dragging in action: update the position of all the windows
+function backgroundDragMouseMove(){
+	var e = window.event;	//capture mouse event data
+	
+	//TEST: write offset data to the footer
+	$('#footerInfo').html("Left: " + (bdStartX - e.pageX) + ", Top: " + (bdStartY - e.pageY));
+	
+	//update the position on each window in the bdWindowStart array
+	for (i = 0, l = bdWindowStart.length; i < l; i++) {
+		var newXpos = bdWindowStart[i].x - (bdStartX - e.pageX);
+		var newYpos = bdWindowStart[i].y - (bdStartY - e.pageY);
+		$('#'+bdWindowStart[i].id).offset({left: newXpos, top: newYpos});
+	}
+	
+	jsPlumb.repaintEverything();		//redraw the links
 };
