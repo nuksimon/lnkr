@@ -15,13 +15,15 @@
 					<input type="button" id="searchFormButton" onclick="createWindowFromSearch()" value="Search">
 				</form>
 				
-				<select  id="dropSource" onchange="updateAutocomplete()">
+				<select  id="dropSource" onchange="updateAutocomplete()" class="dropDown">
 					
 				</select>
 				
-				<img onclick='display1_all();' class="cButtonD1" src="img/circle-icon.png" />
-				<img onclick='display2_all();' class="cButtonD2" src="img/circle-icon.png" />
-				<img onclick='display3_all();' class="cButtonD3" src="img/circle-icon.png" />
+				<img onclick='display1_all();' class="cButtonD1 buttonHeader" src="img/circle-icon.png" />
+				<img onclick='display2_all();' class="cButtonD2 buttonHeader" src="img/circle-icon.png" />
+				<img onclick='display3_all();' class="cButtonD3 buttonHeader" src="img/circle-icon.png" />
+				
+				<img onclick='arrangeWindowGrid();' class="buttonArrange buttonHeader" src="img/grid3.png" />
 				
 			</div>
 			

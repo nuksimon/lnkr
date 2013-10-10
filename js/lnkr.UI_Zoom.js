@@ -179,3 +179,28 @@ function backgroundDragMouseMove(){
 	
 	jsPlumb.repaintEverything();		//redraw the links
 };
+
+
+
+// --------------------- Arrange Windows -------------------------------------
+
+// grid
+function arrangeWindowGrid(){
+
+	//default spacing
+	var pxLeftStart = 20;	//starting offset
+	var pxTopStart = 80;
+	var pxLeft = 350;		//incremental offset
+	var pxTop = 450;
+	var gridWidth = 3;		//# of windows across
+	var i = 0;
+	
+	$('.window').each(function()
+	{
+		var posTop = pxTopStart + Math.floor(i/gridWidth) * pxTop;
+		var postLeft = pxLeftStart + (i % gridWidth) * pxLeft;
+		$(this).offset({top: posTop , left: postLeft});
+		i++;
+	});
+
+};

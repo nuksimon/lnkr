@@ -40,6 +40,14 @@ html, body {
 	display: table-row;
 }
 
+
+#searchForm{
+	float: left;
+}
+.dropDown{
+	float: left;
+}
+
 .window { 
 	opacity:0.8; 
 	filter:alpha(opacity=80); 
@@ -126,6 +134,7 @@ html, body {
 .window lnk{
 	color:SteelBlue;
 	cursor:pointer;
+	text-decoration:underline;
 }
 
 
@@ -168,6 +177,17 @@ html, body {
 	width:10px;
 	height:10px;
 	margin-right:5px;
+}
+
+.buttonArrange{
+	width:20px;
+	height:20px;
+	margin-left:5px;
+	border-radius:0px;
+}
+
+.buttonHeader{
+	cursor:pointer;
 }
 
 .linkHoverStart{
