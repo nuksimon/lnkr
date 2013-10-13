@@ -57,6 +57,13 @@ jsPlumb.bind("ready", function() {
 
 
 
+//handle enter key on search
+$('#searchFormText').keyup(function(event){
+	if(event.keyCode == 13){
+		$('#searchFormButton').click();
+	}
+});
+
 
 //action from Search box to get a new article
 function createWindowFromSearch()
