@@ -191,6 +191,7 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		// parse first paragraph
 		wikipage = $('<div>'+data.parse.text['*']+'</div>').children('p:first');
 		wikipage.find('sup').remove();			//removes reference tags
+		wikipage.find('.error').remove();		//removes cite error message
 		wikipage.find('a').each(function() {
 			//replace hyperlinks with internal links
 			var linkName = $(this).attr('title');
