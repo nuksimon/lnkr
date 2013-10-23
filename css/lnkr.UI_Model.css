@@ -37,6 +37,7 @@ html, body {
 	height:100%;
 }
 
+
 #footer{
 	display: table-row;
 }
@@ -143,6 +144,13 @@ html, body {
 .scrollBarY {
 	max-height: 100px;
 	overflow-y: scroll;
+}
+
+.cSummary{
+	display:none;
+}
+.cLinks{
+	display:none;
 }
 .cButton{
 	width:100%;

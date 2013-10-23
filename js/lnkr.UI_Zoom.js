@@ -151,15 +151,17 @@ function backgroundDragMouseDown(){
 	
 	//enable the drag event
 	$('#background').mousemove(backgroundDragMouseMove);
+	$('#backgroundFill').css('cursor', 'move');			//change the cursor to move
 };
 
 
 //Dragging stop: perform cleanup tasks
 function backgroundDragMouseUp(){
 	
-	$('#background').unbind("mousemove");	//disable the drag event
-	bdWindowStart = [];						//empty the array of start positions
-	jsPlumb.repaintEverything();		//redraw the links
+	$('#background').unbind("mousemove");			//disable the drag event
+	$('#backgroundFill').css('cursor', 'default');	//change the cursor back to normal
+	bdWindowStart = [];								//empty the array of start positions
+	jsPlumb.repaintEverything();					//redraw the links
 };
 
 
@@ -194,11 +196,12 @@ function arrangeWindowGrid(){
 	var pxTop = 450;
 	var gridWidth = 3;		//# of windows across
 	var i = 0;
+	var zoomScale = [1,0.75,0.55,0.4]
 	
 	$('.window').each(function()
 	{
-		var posTop = pxTopStart + Math.floor(i/gridWidth) * pxTop;
-		var postLeft = pxLeftStart + (i % gridWidth) * pxLeft;
+		var posTop = (pxTopStart + Math.floor(i/gridWidth) * pxTop) * zoomScale[zoom_level-1];
+		var postLeft = (pxLeftStart + (i % gridWidth) * pxLeft) * zoomScale[zoom_level-1];
 		$(this).offset({top: posTop , left: postLeft});
 		i++;
 	});
