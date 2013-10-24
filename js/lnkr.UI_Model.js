@@ -204,6 +204,10 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		windowBody = '<p>' + $(wikipage).html() + '</p>';
 		$('#'+newWindowId).find('.cSummary').append(windowBody);	
 		
+		//get the source url and append to the Summary
+		var titleURL = windowTitle.replace(/\s/g, "_");		//turn spaces into underscores for the url
+		windowBody = '<br><p>Source: <a href="' + dataSource + '/wiki/' + titleURL + '" target="_blank">' + dataSource + '</p>';
+		$('#'+newWindowId).find('.cSummary').append(windowBody);
 		
 		//parse the links
 		var arrLink = [];
