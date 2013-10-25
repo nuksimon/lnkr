@@ -109,7 +109,7 @@ function searchArticle(dataSource, windowTitle)
 	OUTPUT
 		-arrLink = array of hyperlinks found in the article, weighted by relevance
 */
-function parseArticle(article, dataSource)
+function parseLinks(article, dataSource)
 {
 	/* objLink = object that stores the link's scores and weight
 			-name = link's name
@@ -287,3 +287,52 @@ function SortByWeight(a, b){
   return ((a.weight < b.weight) ? 1 : ((a.weight > b.weight) ? -1 : 0));
 };
 
+
+
+//Parse the infobox for MetaData
+function parseMetaData(article,windowTitle,newWindowId){
+
+	wikipage = $('<div>'+article.parse.text['*']+'</div>');
+	var infobox = wikipage.find('.infobox');
+	
+	//find birthday
+	var bday = infobox.find('.bday:first').text();							//find the first bday class
+	if (bday == ''){
+		bday = infobox.find("th:contains('Born'):first").next().text();		//no class, perform text search
+	}
+	if (bday == ''){
+		bday = infobox.find("th:contains('Year'):first").next().text();		//no class, perform text search
+	}
+	
+	//find death day
+	var dday = infobox.find('.dday:first').text();							//find the first dday class
+	if (dday == ''){
+		dday = infobox.find("th:contains('Died'):first").next().text();		//no class, perform text search
+	}
+	
+	//find works
+	var works = infobox.find("th:contains('work'):first").next().html();		//no class, perform text search
+	if (works == '' || works == null){
+		works = infobox.find("th:contains('Work'):first").next().html();		//check upper case
+	}
+	if (works == '' || works == null){
+		works = infobox.find("th:contains('Works'):first").next().html();		//check upper case
+	}
+	works = '<div>' + works + '</div>';
+	
+	/*
+	$(works).find('a').each(function() {
+		//replace hyperlinks with internal links
+		var linkName = $(this).attr('title');
+		var linkText = $(this).html();
+		//alert($(this).text());
+		//$(this).replaceWith('<lnk onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ linkName +'&quot;, &quot;'+newWindowId+'&quot;)">' + linkText + '</lnk>');	
+		$(this).replaceWith("<p>REPLACE</p>");
+		alert($(this).html());
+	});
+	*/
+	$(works).find('a').replaceWith("<p>REPLACE</p>");
+	alert(works);
+
+	return '<p>parsed data</p>' + '<p>bday: "' + bday + '"</p>'+ '<p>dday: "' + dday + '"</p>'+ '<p>works: "' + works + '"</p>';
+};

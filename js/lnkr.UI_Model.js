@@ -148,6 +148,10 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 	windowBody += 	'<h2 onclick="displayLinks($(this).parents(&quot;.window&quot;))">Links:</h2>';			//Links
 	windowBody += 	'<div class="cLinks scrollBarY">';
 	windowBody += 	'</div>';
+	windowBody += 	'<h2 onclick="displayMetaData($(this).parents(&quot;.window&quot;))">MetaData:</h2>';			//Meta Data
+	windowBody += 	'<div class="cMetaData scrollBarY">';
+	windowBody += 	'<p>Test Meta Data</p>';
+	windowBody += 	'</div>';
 	windowBody += '</div>';		//close container for Summary and Links
 	
 	
@@ -211,7 +215,7 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		//parse the links
 		var arrLink = [];
-		arrLink = parseArticle(data, dataSource);
+		arrLink = parseLinks(data, dataSource);
 		
 		//Append the link results to the body
 		var outputHTML = "<table border=1 >"; 
@@ -229,6 +233,11 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		
 		drawExternalLinksByName(windowTitle, newWindowId);	//connect external links to this window
+		
+		
+		//parse the MetaData
+		outputHTML = parseMetaData(data,windowTitle,newWindowId);
+		$('#'+newWindowId).find('.cMetaData').append(outputHTML);
 	});
 	
 
@@ -374,6 +383,16 @@ function displayLinks(el)
 		el.find('.cLinks').css('display', 'block');
 	} else {
 		el.find('.cLinks').css('display', 'none');
+	}
+};
+
+function displayMetaData(el)
+{
+	//toggle MetaData
+	if(el.find('.cMetaData').css('display') == 'none'){
+		el.find('.cMetaData').css('display', 'block');
+	} else {
+		el.find('.cMetaData').css('display', 'none');
 	}
 };
 

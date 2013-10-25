@@ -15,10 +15,13 @@ Add Links to object
 on new window, check if existing articles link to it
 
 
+----------------------------------------------------------------
+
+API:
+http://en.wikipedia.org/w/api.php?action=parse&format=xml&callback=?&page=Cat&prop=text|images&section=0
 
 
-
-------------------------------------------------------------
+----------------------------------------------------------------
 
 Parser:
 
