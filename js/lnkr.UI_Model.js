@@ -150,7 +150,6 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 	windowBody += 	'</div>';
 	windowBody += 	'<h2 onclick="displayMetaData($(this).parents(&quot;.window&quot;))">MetaData:</h2>';			//Meta Data
 	windowBody += 	'<div class="cMetaData scrollBarY">';
-	windowBody += 	'<p>Test Meta Data</p>';
 	windowBody += 	'</div>';
 	windowBody += '</div>';		//close container for Summary and Links
 	
@@ -221,8 +220,14 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		var outputHTML = "<table border=1 >"; 
 		outputHTML += "<tr><th>name</th><th>rank</th><th>weight</th></tr>";
 		for (i = 0, l = Math.min(arrLink.length,10); i < l; i++) {
-			outputHTML += '<tr onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ arrLink[i].name +'&quot;, &quot;'+newWindowId+'&quot;)">'
+			/*outputHTML += '<tr onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ arrLink[i].name +'&quot;, &quot;'+newWindowId+'&quot;)">'
 						+ '<td class="linkName">' + arrLink[i].name + "</td>"
+						+ "<td>" + (i+1) + "</td>"
+						+ "<td>" + arrLink[i].weight + "</td>"
+						+ "</tr>";
+						*/
+			outputHTML += '<tr><td class="linkName">'
+						+ buildLnk(windowTitle, arrLink[i].name, newWindowId, arrLink[i].name) + "</td>"
 						+ "<td>" + (i+1) + "</td>"
 						+ "<td>" + arrLink[i].weight + "</td>"
 						+ "</tr>";

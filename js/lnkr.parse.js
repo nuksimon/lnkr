@@ -295,20 +295,36 @@ function parseMetaData(article,windowTitle,newWindowId){
 	wikipage = $('<div>'+article.parse.text['*']+'</div>');
 	var infobox = wikipage.find('.infobox');
 	
-	//find birthday
+	//find start (birthday)
 	var bday = infobox.find('.bday:first').text();							//find the first bday class
 	if (bday == ''){
 		bday = infobox.find("th:contains('Born'):first").next().text();		//no class, perform text search
 	}
-	if (bday == ''){
-		bday = infobox.find("th:contains('Year'):first").next().text();		//no class, perform text search
-	}
 	
-	//find death day
+	
+	//find end (death day)
 	var dday = infobox.find('.dday:first').text();							//find the first dday class
 	if (dday == ''){
 		dday = infobox.find("th:contains('Died'):first").next().text();		//no class, perform text search
 	}
+	
+	//check for Year
+	if (bday == ''){
+		var year = infobox.find("th:contains('Year'):first").next().text();		//no class, perform text search
+		dday = year.replace(/.*-/g, "");
+		bday = year.replace(/-.*/g, "");
+	}
+	
+	
+	//cleanup start and end
+	bday = bday.replace(/c\.\s/g, "");			//removes the "c. " at the start of some dates
+	dday = dday.replace(/c\.\s/g, "");
+	
+	bday = bday.replace(/\s.*/g, "");			//removes everything after the space (" ")
+	dday = dday.replace(/\s.*/g, "");			
+	
+	
+	
 	
 	//find works
 	var works = infobox.find("th:contains('work'):first").next().html();		//no class, perform text search
@@ -318,21 +334,58 @@ function parseMetaData(article,windowTitle,newWindowId){
 	if (works == '' || works == null){
 		works = infobox.find("th:contains('Works'):first").next().html();		//check upper case
 	}
-	works = '<div>' + works + '</div>';
+	works = internalLinks(works, windowTitle, newWindowId);
 	
-	/*
-	$(works).find('a').each(function() {
+	
+	//find origin
+	var origin = infobox.find("th:contains('Origin'):first").next().html();		//no class, perform text search
+	origin = internalLinks(origin, windowTitle, newWindowId);
+	
+	//find members
+	var members = infobox.find("th:contains('Members'):first").next().html();		//no class, perform text search
+	if (members == '' || members == null){
+		members = infobox.find("th:contains('members'):first").next().html();		//check lower case
+	}
+	members = internalLinks(members, windowTitle, newWindowId);
+	
+	//find genre
+	var genre = infobox.find("th:contains('Genre'):first").next().html();		//no class, perform text search
+	if (genre == '' || genre == null){
+		genre = infobox.find("th:contains('Style'):first").next().html();		
+	}
+	genre = internalLinks(genre, windowTitle, newWindowId);
+	
+	
+	//build dataset
+	var metadata = '<p>start: "' + bday + '"</p>';
+	metadata += '<p>end: "' + dday + '"</p>';
+	metadata += '<p>works: "' + works + '"</p>';
+	metadata += '<p>origin: "' + origin + '"</p>';
+	metadata += '<p>members: "' + members + '"</p>';
+	metadata += '<p>genre: "' + genre + '"</p>';
+	
+	return metadata;
+};
+
+
+//turn hyperlinks into internal links
+function internalLinks(el, windowTitle, windowId)
+{
+	el = $('<div>' + el + '</div>');
+	el.find('a').each(function() {
 		//replace hyperlinks with internal links
 		var linkName = $(this).attr('title');
-		var linkText = $(this).html();
-		//alert($(this).text());
-		//$(this).replaceWith('<lnk onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ linkName +'&quot;, &quot;'+newWindowId+'&quot;)">' + linkText + '</lnk>');	
-		$(this).replaceWith("<p>REPLACE</p>");
-		alert($(this).html());
+		var linkText = $(this).html();	
+		$(this).replaceWith(buildLnk(windowTitle, linkName, windowId, linkText));
 	});
-	*/
-	$(works).find('a').replaceWith("<p>REPLACE</p>");
-	alert(works);
-
-	return '<p>parsed data</p>' + '<p>bday: "' + bday + '"</p>'+ '<p>dday: "' + dday + '"</p>'+ '<p>works: "' + works + '"</p>';
+	return el.html();
 };
+
+
+//build the <lnk> element
+function buildLnk(windowTitle, linkName, windowId, linkText)
+{
+	return '<lnk onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ linkName +'&quot;, &quot;'+windowId+'&quot;)">' + linkText + '</lnk>';
+};
+
+
