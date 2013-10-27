@@ -1,4 +1,5 @@
-var newWindowCount = 1000;
+var newWindowCount = 1000;	//starting window counter
+var maxLinks = 10;			//max number of links to include in the link table
 
 jsPlumb.bind("ready", function() {
 
@@ -114,52 +115,13 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 	newWindowCount = newWindowCount + 1				//increment window counter
 	
 	
-	
-	
-	
-	//Add Buttons
-	windowBody += '<div class="cButton">';
-	windowBody += '<img onclick="display1($(this).parents(&quot;.window&quot;));" class="cButtonD1" src="img/circle-icon.png" />';
-	windowBody += '<img onclick="display2($(this).parents(&quot;.window&quot;));" class="cButtonD2" src="img/circle-icon.png" />';
-	windowBody += '<img onclick="display3($(this).parents(&quot;.window&quot;));" class="cButtonD3" src="img/circle-icon.png" />';
-	windowBody += '<img class="cButtonClose" onclick="closeWindow($(this).parents(&quot;.window&quot;));" src="img/Button_Icon_Red.svg.png" />';
-	windowBody += '</div>';
-	
-	//Add Image container
-	windowBody += '<div class="cImage display2">';
-	windowBody += '<img class="loadWheel img_zoom' + zoom_level +'" src="img/load_wheel.gif" />';
-	windowBody += '</div>';
-	
-	//Add Title container
-	windowBody += '<h1> Loading... </h1>';
-	
-	//Add Data Source info
-	windowBody += '<div class="debugId dataSource">' + dataSource + '</div>';
-	
-	//Add test info
-	windowBody += '<p class="debugId">Article Name: ' + windowTitle + '</p>';	
-	windowBody += '<p class="debugId">Window Id: ' + newWindow.id + '</p>';
-	
-	//Add container for Summary and Links
-	windowBody += '<div class="display3">';
-	windowBody += 	'<h2 onclick="displaySummary($(this).parents(&quot;.window&quot;))">Summary:</h2>';		//Summary
-	windowBody += 	'<div class="cSummary scrollBarY">';
-	windowBody += 	'</div>';
-	windowBody += 	'<h2 onclick="displayLinks($(this).parents(&quot;.window&quot;))">Links:</h2>';			//Links
-	windowBody += 	'<div class="cLinks scrollBarY">';
-	windowBody += 	'</div>';
-	windowBody += 	'<h2 onclick="displayMetaData($(this).parents(&quot;.window&quot;))">MetaData:</h2>';			//Meta Data
-	windowBody += 	'<div class="cMetaData scrollBarY">';
-	windowBody += 	'</div>';
-	windowBody += '</div>';		//close container for Summary and Links
-	
-	
-	//Append to the Window Element
+	//Build the window body in HTML and Append to the Window Element
+	windowBody = formatWindow(dataSource, windowTitle, newWindow.id);
 	$('#'+newWindowId).append(windowBody);
 	
 	
 	
-	
+	//-------------------------------
 	
 	//wiki search api
 	//ex: url = "http://en.wikipedia.org" + "/w/api.php" + "?action=parse&format=json&callback=?";
@@ -199,9 +161,8 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 			//replace hyperlinks with internal links
 			var linkName = $(this).attr('title');
 			var linkText = $(this).html();
-			$(this).replaceWith('<lnk onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ linkName +'&quot;, &quot;'+newWindowId+'&quot;)">' + linkText + '</lnk>');	
+			$(this).replaceWith(buildLnk(windowTitle, linkName, newWindowId, linkText));
 		});
-		//alert($(wikipage).html());
 	
 		//append to the Summary container
 		windowBody = '<p>' + $(wikipage).html() + '</p>';
@@ -212,31 +173,24 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		windowBody = '<br><p>Source: <a href="' + dataSource + '/wiki/' + titleURL + '" target="_blank">' + dataSource + '</p>';
 		$('#'+newWindowId).find('.cSummary').append(windowBody);
 		
+		
 		//parse the links
 		var arrLink = [];
 		arrLink = parseLinks(data, dataSource, windowTitle, newWindowId);
 		
 		//Append the link results to the body
-		var outputHTML = "<table border=1 >"; 
-		outputHTML += "<tr><th>name</th><th>rank</th><th>weight</th></tr>";
-		for (i = 0, l = Math.min(arrLink.length,10); i < l; i++) {
-			outputHTML += '<tr><td class="linkName">'
-						//+ buildLnk(windowTitle, arrLink[i].name, newWindowId, arrLink[i].name) + "</td>"
-						+ arrLink[i].lnk + "</td>"
-						+ "<td>" + (i+1) + "</td>"
-						+ "<td>" + arrLink[i].weight + "</td>"
-						+ "</tr>";
-			drawLinksByName(arrLink[i].name, newWindowId, false);			//connect internal links to existing windows
-		}
-		outputHTML += "</table>";
+		var outputHTML = formatLinks(arrLink);
 		$('#'+newWindowId).find('.cLinks').append(outputHTML);
 		
+		//connect internal links to existing windows
+		for (i = 0, l = Math.min(arrLink.length, maxLinks); i < l; i++) {
+			drawLinksByName(arrLink[i].name, newWindowId, false);			
+		}
 		
 		drawExternalLinksByName(windowTitle, newWindowId);	//connect external links to this window
 		
 		
-		//parse the MetaData
-		//outputHTML = parseMetaData(data,windowTitle,newWindowId);
+		//parse the MetaData and append
 		outputHTML = formatMetadata(parseMetaData(data,windowTitle,newWindowId));
 		$('#'+newWindowId).find('.cMetaData').append(outputHTML);
 	});
@@ -516,9 +470,9 @@ function drawExternalLinksByName(articleName, window_id){
 function formatMetadata(metadata)
 {
 	//INPUT:	array of metadata objects {tag, val}
-	//OUTPUT: table with tag-value pairs for the MetaData section
+	//OUTPUT: html table with tag-value pairs for the MetaData section
 	
-	var outputHTML = '<table>';
+	var outputHTML = '<table border=1>';
 	for (i = 0, l = metadata.length; i < l; i++) {
 		outputHTML += '<tr><th>' + metadata[i].tag + '</th>';
 		outputHTML += '<td>' + metadata[i].val + '</td></tr>';
@@ -529,17 +483,63 @@ function formatMetadata(metadata)
 };
 
 
-function formatLinks(arrlinks)
+function formatLinks(arrLink)
 {
-	//INPUT:	array of link objects {name, url, count_link, count_text, count_p1, count_p2, count_infobox, count_navbox}
-	//OUTPUT: table with tag-value pairs for the MetaData section
+	//INPUT:	array of link objects {name, lnk, weight, ...}
+	//OUTPUT: html table with link-rank-weight pairs for the Links section
 	
-	var outputHTML = '<table>';
-	for (i = 0, l = metadata.length; i < l; i++) {
-		outputHTML += '<tr><th>' + metadata[i].tag + '</th>';
-		outputHTML += '<td>' + metadata[i].val + '</td></tr>';
+	var outputHTML = '<table border=1>';
+	outputHTML += "<tr><th>name</th><th>rank</th><th>weight</th></tr>";
+	for (i = 0, l = Math.min(arrLink.length, maxLinks); i < l; i++) {
+		outputHTML += '<tr><td class="linkName">' + arrLink[i].lnk + "</td>";
+		outputHTML +=  "<td>" + (i+1) + "</td>";
+		outputHTML +=  "<td>" + arrLink[i].weight + "</td></tr>";
 	}
 	outputHTML += '</table>';
 	
 	return outputHTML;
+};
+
+
+function formatWindow(dataSource, windowTitle, windowId)
+{
+	//builds the window skeleton in HTML
+
+	//Add Buttons
+	var windowBody = '<div class="cButton">';
+	windowBody += '<img onclick="display1($(this).parents(&quot;.window&quot;));" class="cButtonD1" src="img/circle-icon.png" />';
+	windowBody += '<img onclick="display2($(this).parents(&quot;.window&quot;));" class="cButtonD2" src="img/circle-icon.png" />';
+	windowBody += '<img onclick="display3($(this).parents(&quot;.window&quot;));" class="cButtonD3" src="img/circle-icon.png" />';
+	windowBody += '<img class="cButtonClose" onclick="closeWindow($(this).parents(&quot;.window&quot;));" src="img/Button_Icon_Red.svg.png" />';
+	windowBody += '</div>';
+	
+	//Add Image container
+	windowBody += '<div class="cImage display2">';
+	windowBody += '<img class="loadWheel img_zoom' + zoom_level +'" src="img/load_wheel.gif" />';
+	windowBody += '</div>';
+	
+	//Add Title container
+	windowBody += '<h1> Loading... </h1>';
+	
+	//Add Data Source info
+	windowBody += '<div class="debugId dataSource">' + dataSource + '</div>';
+	
+	//Add test info
+	windowBody += '<p class="debugId">Article Name: ' + windowTitle + '</p>';	
+	windowBody += '<p class="debugId">Window Id: ' + windowId + '</p>';
+	
+	//Add container for Summary and Links
+	windowBody += '<div class="display3">';
+	windowBody += 	'<h2 onclick="displaySummary($(this).parents(&quot;.window&quot;))">Summary:</h2>';		//Summary
+	windowBody += 	'<div class="cSummary scrollBarY">';
+	windowBody += 	'</div>';
+	windowBody += 	'<h2 onclick="displayLinks($(this).parents(&quot;.window&quot;))">Links:</h2>';			//Links
+	windowBody += 	'<div class="cLinks scrollBarY">';
+	windowBody += 	'</div>';
+	windowBody += 	'<h2 onclick="displayMetaData($(this).parents(&quot;.window&quot;))">MetaData:</h2>';			//Meta Data
+	windowBody += 	'<div class="cMetaData scrollBarY">';
+	windowBody += 	'</div>';
+	windowBody += '</div>';		//close container for Summary and Links
+	
+	return windowBody;
 };

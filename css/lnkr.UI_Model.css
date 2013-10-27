@@ -221,6 +221,9 @@ img{
 	border-radius:4px;
 
 }
+table {
+    border-collapse: collapse;
+}
 
 #window1 { left:35em;top:1em;}
 #window5 { left:65em;top:1em;}
