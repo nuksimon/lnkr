@@ -109,7 +109,7 @@ function searchArticle(dataSource, windowTitle)
 	OUTPUT
 		-arrLink = array of hyperlinks found in the article, weighted by relevance
 */
-function parseLinks(article, dataSource)
+function parseLinks(article, dataSource, windowTitle, windowId)
 {
 	/* objLink = object that stores the link's scores and weight
 			-name = link's name
@@ -235,6 +235,9 @@ function parseLinks(article, dataSource)
 			}
 		}
 		
+		//add the internal link 
+		arrLink[i].lnk = buildLnk(windowTitle, arrLink[i].name, windowId, arrLink[i].name);
+		
 	}
 	
 	//apply the weighting to each link in the array
@@ -292,6 +295,9 @@ function SortByWeight(a, b){
 //Parse the infobox for MetaData
 function parseMetaData(article,windowTitle,newWindowId){
 
+	var metadata = [];	//array of tag-value pairs
+	var objMetadata;	//{tag, val}
+	
 	wikipage = $('<div>'+article.parse.text['*']+'</div>');
 	var infobox = wikipage.find('.infobox');
 	
@@ -299,6 +305,12 @@ function parseMetaData(article,windowTitle,newWindowId){
 	var bday = infobox.find('.bday:first').text();							//find the first bday class
 	if (bday == ''){
 		bday = infobox.find("th:contains('Born'):first").next().text();		//no class, perform text search
+	}
+	if (bday == ''){
+		bday = infobox.find("th:contains('Publication date'):first").next().text();		//books
+	}
+	if (bday == ''){
+		bday = infobox.find("th:contains('Release'):first").next().text();		//movie/album
 	}
 	
 	
@@ -323,6 +335,14 @@ function parseMetaData(article,windowTitle,newWindowId){
 	bday = bday.replace(/\s.*/g, "");			//removes everything after the space (" ")
 	dday = dday.replace(/\s.*/g, "");			
 	
+	if (bday != '' && bday != null){
+		objMetadata = {tag: 'start', val: bday};
+		metadata.push(objMetadata);
+	}
+	if (dday != '' && dday != null){
+		objMetadata = {tag: 'end', val: dday};
+		metadata.push(objMetadata);
+	}
 	
 	
 	
@@ -334,35 +354,47 @@ function parseMetaData(article,windowTitle,newWindowId){
 	if (works == '' || works == null){
 		works = infobox.find("th:contains('Works'):first").next().html();		//check upper case
 	}
-	works = internalLinks(works, windowTitle, newWindowId);
+	if (works != '' && works != null){
+		works = internalLinks(works, windowTitle, newWindowId);
+		objMetadata = {tag: 'works', val: works};
+		metadata.push(objMetadata);
+	}
 	
 	
 	//find origin
 	var origin = infobox.find("th:contains('Origin'):first").next().html();		//no class, perform text search
-	origin = internalLinks(origin, windowTitle, newWindowId);
+	if (origin != '' && origin != null){
+		origin = internalLinks(origin, windowTitle, newWindowId);
+		objMetadata = {tag: 'origin', val: origin};
+		metadata.push(objMetadata);
+	}
 	
 	//find members
 	var members = infobox.find("th:contains('Members'):first").next().html();		//no class, perform text search
 	if (members == '' || members == null){
 		members = infobox.find("th:contains('members'):first").next().html();		//check lower case
 	}
-	members = internalLinks(members, windowTitle, newWindowId);
+	if (members == '' || members == null){
+		members = infobox.find("th:contains('Starring'):first").next().html();		//check lower case
+	}
+	if (members != '' && members != null){
+		members = internalLinks(members, windowTitle, newWindowId);
+		objMetadata = {tag: 'members', val: members};
+		metadata.push(objMetadata);
+	}
 	
 	//find genre
 	var genre = infobox.find("th:contains('Genre'):first").next().html();		//no class, perform text search
 	if (genre == '' || genre == null){
 		genre = infobox.find("th:contains('Style'):first").next().html();		
 	}
-	genre = internalLinks(genre, windowTitle, newWindowId);
+	if (genre != '' && genre != null){
+		genre = internalLinks(genre, windowTitle, newWindowId);
+		objMetadata = {tag: 'genre', val: genre};
+		metadata.push(objMetadata);
+	}
+
 	
-	
-	//build dataset
-	var metadata = '<p>start: "' + bday + '"</p>';
-	metadata += '<p>end: "' + dday + '"</p>';
-	metadata += '<p>works: "' + works + '"</p>';
-	metadata += '<p>origin: "' + origin + '"</p>';
-	metadata += '<p>members: "' + members + '"</p>';
-	metadata += '<p>genre: "' + genre + '"</p>';
 	
 	return metadata;
 };

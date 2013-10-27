@@ -214,20 +214,15 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		//parse the links
 		var arrLink = [];
-		arrLink = parseLinks(data, dataSource);
+		arrLink = parseLinks(data, dataSource, windowTitle, newWindowId);
 		
 		//Append the link results to the body
 		var outputHTML = "<table border=1 >"; 
 		outputHTML += "<tr><th>name</th><th>rank</th><th>weight</th></tr>";
 		for (i = 0, l = Math.min(arrLink.length,10); i < l; i++) {
-			/*outputHTML += '<tr onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ arrLink[i].name +'&quot;, &quot;'+newWindowId+'&quot;)">'
-						+ '<td class="linkName">' + arrLink[i].name + "</td>"
-						+ "<td>" + (i+1) + "</td>"
-						+ "<td>" + arrLink[i].weight + "</td>"
-						+ "</tr>";
-						*/
 			outputHTML += '<tr><td class="linkName">'
-						+ buildLnk(windowTitle, arrLink[i].name, newWindowId, arrLink[i].name) + "</td>"
+						//+ buildLnk(windowTitle, arrLink[i].name, newWindowId, arrLink[i].name) + "</td>"
+						+ arrLink[i].lnk + "</td>"
 						+ "<td>" + (i+1) + "</td>"
 						+ "<td>" + arrLink[i].weight + "</td>"
 						+ "</tr>";
@@ -241,7 +236,8 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		
 		//parse the MetaData
-		outputHTML = parseMetaData(data,windowTitle,newWindowId);
+		//outputHTML = parseMetaData(data,windowTitle,newWindowId);
+		outputHTML = formatMetadata(parseMetaData(data,windowTitle,newWindowId));
 		$('#'+newWindowId).find('.cMetaData').append(outputHTML);
 	});
 	
@@ -512,4 +508,38 @@ function drawExternalLinksByName(articleName, window_id){
 
 	//enable draggable on the entire class
 	jsPlumb.draggable(jsPlumb.getSelector(".window"), { cancel: '.scrollBarY' });
+};
+
+
+
+//------------ format data -----------------------------------------------------
+function formatMetadata(metadata)
+{
+	//INPUT:	array of metadata objects {tag, val}
+	//OUTPUT: table with tag-value pairs for the MetaData section
+	
+	var outputHTML = '<table>';
+	for (i = 0, l = metadata.length; i < l; i++) {
+		outputHTML += '<tr><th>' + metadata[i].tag + '</th>';
+		outputHTML += '<td>' + metadata[i].val + '</td></tr>';
+	}
+	outputHTML += '</table>';
+	
+	return outputHTML;
+};
+
+
+function formatLinks(arrlinks)
+{
+	//INPUT:	array of link objects {name, url, count_link, count_text, count_p1, count_p2, count_infobox, count_navbox}
+	//OUTPUT: table with tag-value pairs for the MetaData section
+	
+	var outputHTML = '<table>';
+	for (i = 0, l = metadata.length; i < l; i++) {
+		outputHTML += '<tr><th>' + metadata[i].tag + '</th>';
+		outputHTML += '<td>' + metadata[i].val + '</td></tr>';
+	}
+	outputHTML += '</table>';
+	
+	return outputHTML;
 };
