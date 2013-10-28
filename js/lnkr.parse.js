@@ -336,11 +336,11 @@ function parseMetaData(article,windowTitle,newWindowId){
 	dday = dday.replace(/\s.*/g, "");			
 	
 	if (bday != '' && bday != null){
-		objMetadata = {tag: 'start', val: bday};
+		objMetadata = {tag: 'Start', val: bday};
 		metadata.push(objMetadata);
 	}
 	if (dday != '' && dday != null){
-		objMetadata = {tag: 'end', val: dday};
+		objMetadata = {tag: 'End', val: dday};
 		metadata.push(objMetadata);
 	}
 	
@@ -356,7 +356,7 @@ function parseMetaData(article,windowTitle,newWindowId){
 	}
 	if (works != '' && works != null){
 		works = internalLinks(works, windowTitle, newWindowId);
-		objMetadata = {tag: 'works', val: works};
+		objMetadata = {tag: 'Works', val: works};
 		metadata.push(objMetadata);
 	}
 	
@@ -365,7 +365,7 @@ function parseMetaData(article,windowTitle,newWindowId){
 	var origin = infobox.find("th:contains('Origin'):first").next().html();		//no class, perform text search
 	if (origin != '' && origin != null){
 		origin = internalLinks(origin, windowTitle, newWindowId);
-		objMetadata = {tag: 'origin', val: origin};
+		objMetadata = {tag: 'Origin', val: origin};
 		metadata.push(objMetadata);
 	}
 	
@@ -379,7 +379,7 @@ function parseMetaData(article,windowTitle,newWindowId){
 	}
 	if (members != '' && members != null){
 		members = internalLinks(members, windowTitle, newWindowId);
-		objMetadata = {tag: 'members', val: members};
+		objMetadata = {tag: 'Members', val: members};
 		metadata.push(objMetadata);
 	}
 	
@@ -390,7 +390,7 @@ function parseMetaData(article,windowTitle,newWindowId){
 	}
 	if (genre != '' && genre != null){
 		genre = internalLinks(genre, windowTitle, newWindowId);
-		objMetadata = {tag: 'genre', val: genre};
+		objMetadata = {tag: 'Genre', val: genre};
 		metadata.push(objMetadata);
 	}
 

@@ -475,7 +475,7 @@ function formatMetadata(metadata)
 	var outputHTML = '<table border=1>';
 	for (i = 0, l = metadata.length; i < l; i++) {
 		outputHTML += '<tr><th>' + metadata[i].tag + '</th>';
-		outputHTML += '<td>' + metadata[i].val + '</td></tr>';
+		outputHTML += '<td class="md' + metadata[i].tag + '">' + metadata[i].val + '</td></tr>';
 	}
 	outputHTML += '</table>';
 	

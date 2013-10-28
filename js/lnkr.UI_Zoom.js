@@ -207,3 +207,44 @@ function arrangeWindowGrid(){
 	});
 
 };
+
+
+// chronological
+function arrangeWindowChrono(){
+
+	var arrWindow = [];
+	var objWindow;
+	
+	//find the start date of each window
+	$('.window').each(function()
+	{
+		var wId = $(this).attr('id');
+		var wStart = $(this).find('.mdStart:first').text();
+		if (wStart == '' || wStart == null){
+			wStart = 0;
+		}
+		objWindow = {id: wId, start: wStart};
+		arrWindow.push(objWindow);
+	});
+	
+	//chrononlogical sort
+	arrWindow.sort(SortByChrono);
+	
+	//default spacing
+	var pxLeftStart = 20;	//starting offset
+	var pxTopStart = 80;
+	var pxLeft = 350;		//incremental offset
+	var pxTop = 0;
+	var zoomScale = [1,0.75,0.55,0.4]
+	
+	for (i = 0, l = arrWindow.length; i < l; i++) {
+		var posTop = (pxTopStart + (i * pxTop)) * zoomScale[zoom_level-1];
+		var postLeft = (pxLeftStart + (i * pxLeft)) * zoomScale[zoom_level-1];
+		$('#' + arrWindow[i].id).offset({top: posTop , left: postLeft});
+	}
+}
+
+//sort the "weight" field in the array of links
+function SortByChrono(a, b){
+  return ((a.start > b.start) ? 1 : ((a.start < b.start) ? -1 : 0));
+};

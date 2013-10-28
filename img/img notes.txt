@@ -1,1 +1,2 @@
 load_wheel.gif = http://preloaders.net/
+clock.png = https://www.iconfinder.com/icons/175776/clock_icon
