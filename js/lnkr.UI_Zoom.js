@@ -220,9 +220,11 @@ function arrangeWindowChrono(){
 	{
 		var wId = $(this).attr('id');
 		var wStart = $(this).find('.mdStart:first').text();
+		
 		if (wStart == '' || wStart == null){
-			wStart = 0;
+			wStart = -1;
 		}
+		//alert(wId + ' - "' + wStart + '"');
 		objWindow = {id: wId, start: wStart};
 		arrWindow.push(objWindow);
 	});
@@ -246,5 +248,8 @@ function arrangeWindowChrono(){
 
 //sort the "weight" field in the array of links
 function SortByChrono(a, b){
-  return ((a.start > b.start) ? 1 : ((a.start < b.start) ? -1 : 0));
+	var aDate = new Date(a.start);
+	var bDate = new Date(b.start);
+	return ((aDate > bDate) ? 1 : ((aDate < bDate) ? -1 : 0));
+	//return ((a.start > b.start) ? 1 : ((a.start < b.start) ? -1 : 0));
 };

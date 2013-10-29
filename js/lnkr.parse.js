@@ -323,8 +323,9 @@ function parseMetaData(article,windowTitle,newWindowId){
 	//check for Year
 	if (bday == ''){
 		var year = infobox.find("th:contains('Year'):first").next().text();		//no class, perform text search
-		dday = year.replace(/.*-/g, "");
+		year = year.replace(/\u2013|\u2014/g, "-");			//change "en" and "em" dashes to hyphens "-"
 		bday = year.replace(/-.*/g, "");
+		dday = year.replace(/.*-/g, "");
 	}
 	
 	
@@ -332,10 +333,27 @@ function parseMetaData(article,windowTitle,newWindowId){
 	bday = bday.replace(/c\.\s/g, "");			//removes the "c. " at the start of some dates
 	dday = dday.replace(/c\.\s/g, "");
 	
-	bday = bday.replace(/\s.*/g, "");			//removes everything after the space (" ")
-	dday = dday.replace(/\s.*/g, "");			
+	bday = bday.replace(/before /g, "");			//removes the "before" at the start of some dates
+	dday = dday.replace(/before /g, "");
+	
+	bday = bday.replace(/,.*/g, "");			//removes everything after the comma (",")
+	dday = dday.replace(/,.*/g, "");
+	
+	bday = bday.replace(/ \(.*/g, "");			//removes everything after the space+bracket (" (")
+	dday = dday.replace(/ \(.*/g, "");
+
+	bday = convertTextDateToNumber(bday);		//check for "text" dates, i.e. '20 January 1998'
+	dday = convertTextDateToNumber(dday);
+	
+	//bday = bday.replace(/\s.*/g, "");			//removes everything after the space (" ")
+	//dday = dday.replace(/\s.*/g, "");		
+	
+
+	
+	
 	
 	if (bday != '' && bday != null){
+		//var bdayDate = new Date(bday);
 		objMetadata = {tag: 'Start', val: bday};
 		metadata.push(objMetadata);
 	}
@@ -353,6 +371,9 @@ function parseMetaData(article,windowTitle,newWindowId){
 	}
 	if (works == '' || works == null){
 		works = infobox.find("th:contains('Works'):first").next().html();		//check upper case
+	}
+	if (works == '' || works == null){
+		works = infobox.find("th:contains('Known'):first").next().html();		//known for
 	}
 	if (works != '' && works != null){
 		works = internalLinks(works, windowTitle, newWindowId);
@@ -388,6 +409,9 @@ function parseMetaData(article,windowTitle,newWindowId){
 	if (genre == '' || genre == null){
 		genre = infobox.find("th:contains('Style'):first").next().html();		
 	}
+	if (genre == '' || genre == null){
+		genre = infobox.find("th:contains('Movement'):first").next().html();		
+	}
 	if (genre != '' && genre != null){
 		genre = internalLinks(genre, windowTitle, newWindowId);
 		objMetadata = {tag: 'Genre', val: genre};
@@ -421,3 +445,35 @@ function buildLnk(windowTitle, linkName, windowId, linkText)
 };
 
 
+
+
+
+//----------- Date functions --------------------------------------------------------
+
+//cred: http://stackoverflow.com/questions/3569126/is-there-anything-in-javascript-that-can-convert-august-to-8
+function convertMonthNameToNumber(monthName) {
+    var myDate = new Date(monthName + " 1, 2000");
+    var monthDigit = myDate.getMonth();
+    monthDigit = isNaN(monthDigit) ? 0 : (monthDigit + 1);				//return 0 if it the convert fails
+	monthDigit = (monthDigit >= 10) ? monthDigit : ('0' + monthDigit);	//zero pad to 2 digits
+	return monthDigit;
+}
+
+//check if the date is text ('20 January 1998') and convert to number ('1998-01-20') else return original
+function convertTextDateToNumber(checkDate){
+
+	var reTextDate = new RegExp(/[0-9]+ [a-z]+ [0-9]+/gi);		//check for "text" dates, i.e. '20 January 1998'
+	
+	if (reTextDate.test(checkDate)){
+		var reYear = new RegExp(/\s\d+/);							//gets the year (#s after a space)
+		var reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
+		var reDay = new RegExp(/\d+\s/);							//gets the day (first #s)
+	
+		var tempDate = reYear.exec(checkDate);
+		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
+		tempDate += "-" + reDay.exec(checkDate);
+		checkDate = tempDate;
+	}
+	
+	return checkDate;
+}
