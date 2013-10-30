@@ -178,16 +178,16 @@ html, body {
 }
 
 .buttonWindow{
-	width:15px;
-	height:15px;
+	max-width:15px;
+	max-height:15px;
 	margin-left:5px;
 	border-radius:0px;
 }
 
 .buttonHeader{
 	cursor:pointer;
-	width:25px;
-	height:25px;
+	max-width:25px;
+	max-height:25px;
 	margin-left:5px;
 	border-radius:0px;
 }
