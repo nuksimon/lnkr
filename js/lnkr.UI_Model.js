@@ -132,7 +132,8 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		page: windowTitle, 
 		prop:"text|images", 
 		uselang:"en",
-		section:0
+		section:0,
+		redirects:true
 	}, function(data) {
 		
 		

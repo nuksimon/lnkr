@@ -297,6 +297,7 @@ function parseMetaData(article,windowTitle,newWindowId){
 
 	var metadata = [];	//array of tag-value pairs
 	var objMetadata;	//{tag, val}
+	var tagVal;
 	
 	wikipage = $('<div>'+article.parse.text['*']+'</div>');
 	var infobox = wikipage.find('.infobox');
@@ -330,14 +331,11 @@ function parseMetaData(article,windowTitle,newWindowId){
 	
 	
 	//cleanup start and end
-	bday = bday.replace(/c\.\s/g, "");			//removes the "c. " at the start of some dates
-	dday = dday.replace(/c\.\s/g, "");
+	bday = bday.replace(/c(\.|a|a\.)\s/g, "");			//removes the "c(a.) " at the start of some dates
+	dday = dday.replace(/c(\.|a|a\.)\s/g, "");
 	
 	bday = bday.replace(/before /g, "");			//removes the "before" at the start of some dates
 	dday = dday.replace(/before /g, "");
-	
-	bday = bday.replace(/,.*/g, "");			//removes everything after the comma (",")
-	dday = dday.replace(/,.*/g, "");
 	
 	bday = bday.replace(/ \(.*/g, "");			//removes everything after the space+bracket (" (")
 	dday = dday.replace(/ \(.*/g, "");
@@ -345,9 +343,11 @@ function parseMetaData(article,windowTitle,newWindowId){
 	bday = convertTextDateToNumber(bday);		//check for "text" dates, i.e. '20 January 1998'
 	dday = convertTextDateToNumber(dday);
 	
-	//bday = bday.replace(/\s.*/g, "");			//removes everything after the space (" ")
-	//dday = dday.replace(/\s.*/g, "");		
+	bday = bday.replace(/\s.*/g, "");			//removes everything after the space (" ")
+	dday = dday.replace(/\s.*/g, "");		
 	
+	bday = bday.replace(/,.*/g, "");			//removes everything after the comma (",")
+	dday = dday.replace(/,.*/g, "");
 
 	
 	
@@ -365,42 +365,50 @@ function parseMetaData(article,windowTitle,newWindowId){
 	
 	
 	//find works
-	var works = infobox.find("th:contains('work'):first").next().html();		//no class, perform text search
-	if (works == '' || works == null){
-		works = infobox.find("th:contains('Work'):first").next().html();		//check upper case
+	tagVal = infobox.find("th:contains('work'):first").next().html();		//no class, perform text search
+	if (tagVal == '' || tagVal == null){
+		tagVal = infobox.find("th:contains('Work'):first").next().html();		//check upper case
 	}
-	if (works == '' || works == null){
-		works = infobox.find("th:contains('Works'):first").next().html();		//check upper case
+	if (tagVal == '' || tagVal == null){
+		tagVal = infobox.find("th:contains('Known'):first").next().html();		//known for
 	}
-	if (works == '' || works == null){
-		works = infobox.find("th:contains('Known'):first").next().html();		//known for
-	}
-	if (works != '' && works != null){
-		works = internalLinks(works, windowTitle, newWindowId);
-		objMetadata = {tag: 'Works', val: works};
+	if (tagVal != '' && tagVal != null){
+		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
+		objMetadata = {tag: 'Known for', val: tagVal};
 		metadata.push(objMetadata);
 	}
 	
 	
 	//find origin
-	var origin = infobox.find("th:contains('Origin'):first").next().html();		//no class, perform text search
-	if (origin != '' && origin != null){
-		origin = internalLinks(origin, windowTitle, newWindowId);
-		objMetadata = {tag: 'Origin', val: origin};
+	tagVal = infobox.find("th:contains('Origin'):first").next().html();		//no class, perform text search
+	if (tagVal != '' && tagVal != null){
+		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
+		objMetadata = {tag: 'Origin', val: tagVal};
 		metadata.push(objMetadata);
 	}
 	
 	//find members
-	var members = infobox.find("th:contains('Members'):first").next().html();		//no class, perform text search
-	if (members == '' || members == null){
-		members = infobox.find("th:contains('members'):first").next().html();		//check lower case
+	tagVal= infobox.find("th:contains('Members'):first").next().html();		//no class, perform text search
+	if (tagVal == '' || tagVal == null){
+		tagVal = infobox.find("th:contains('members'):first").next().html();		//check lower case
 	}
-	if (members == '' || members == null){
-		members = infobox.find("th:contains('Starring'):first").next().html();		//check lower case
+	if (tagVal == '' || tagVal == null){
+		tagVal = infobox.find("th:contains('Starring'):first").next().html();		//check lower case
 	}
-	if (members != '' && members != null){
-		members = internalLinks(members, windowTitle, newWindowId);
-		objMetadata = {tag: 'Members', val: members};
+	if (tagVal != '' && tagVal != null){
+		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
+		objMetadata = {tag: 'Members', val: tagVal};
+		metadata.push(objMetadata);
+	}
+	
+	//find author
+	tagVal = infobox.find("th:contains('Author'):first").next().html();		//no class, perform text search
+	if (tagVal == '' || tagVal == null){
+		tagVal = infobox.find("th:contains('author'):first").next().html();		//check lower case
+	}
+	if (tagVal != '' && tagVal != null){
+		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
+		objMetadata = {tag: 'Author', val: tagVal};
 		metadata.push(objMetadata);
 	}
 	
@@ -462,9 +470,13 @@ function convertMonthNameToNumber(monthName) {
 //check if the date is text ('20 January 1998') and convert to number ('1998-01-20') else return original
 function convertTextDateToNumber(checkDate){
 
-	var reTextDate = new RegExp(/[0-9]+ [a-z]+ [0-9]+/gi);		//check for "text" dates, i.e. '20 January 1998'
+	var reTextDateDMY = new RegExp(/[0-9]+( |.[0-9]+ )[a-z]+ [0-9]+/gi);			//dd Month yyyy  i.e. '20 January 1998'
+	//var reTextDateDDMY = new RegExp(/[0-9]+.[0-9]+ [a-z]+ [0-9]+/gi);	//dd-dd Month yyyy  i.e. '20-21 January 1998'
+	var reTextDateMDY = new RegExp(/[a-z]+ [0-9]+, [0-9]+/gi);			//Month dd, yyyy i.e. 'January 20, 1998'
+	var reNum = new RegExp(/\d+/);										//filter the first group of #s
 	
-	if (reTextDate.test(checkDate)){
+	//dd Month yyyy
+	if (reTextDateDMY.test(checkDate)){	
 		var reYear = new RegExp(/\s\d+/);							//gets the year (#s after a space)
 		var reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
 		var reDay = new RegExp(/\d+\s/);							//gets the day (first #s)
@@ -472,7 +484,20 @@ function convertTextDateToNumber(checkDate){
 		var tempDate = reYear.exec(checkDate);
 		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
 		tempDate += "-" + reDay.exec(checkDate);
-		checkDate = tempDate;
+		checkDate = tempDate.replace(/\s/g, "");									//clean up any spaces
+		//alert('1: "' +checkDate+'"');
+	}
+	//Month dd, yyyy
+	else if (reTextDateMDY.test(checkDate)){
+		var reYear = new RegExp(/,\s\d+/);							//gets the year (#s after a comma+space)
+		var reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
+		var reDay = new RegExp(/[a-z]\s\d+/);							//gets the day (#s after alpha+space)
+		
+		var tempDate = reNum.exec(reYear.exec(checkDate));						
+		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
+		tempDate += "-" + reNum.exec(reDay.exec(checkDate));
+		checkDate = tempDate.replace(/\s/g, "");
+		//alert('2: "'+checkDate+'"');
 	}
 	
 	return checkDate;

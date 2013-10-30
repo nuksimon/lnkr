@@ -192,6 +192,10 @@ html, body {
 	border-radius:0px;
 }
 
+.spacer{
+	margin-left:15px;
+}
+
 .linkHoverStart{
 	color:yellow;
 	border:red;
