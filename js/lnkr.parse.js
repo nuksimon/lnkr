@@ -300,7 +300,7 @@ function parseMetaData(article,windowTitle,newWindowId){
 	var tagVal;
 	
 	wikipage = $('<div>'+article.parse.text['*']+'</div>');
-	var infobox = wikipage.find('.infobox');
+	var infobox = wikipage.find('.infobox:first');
 	
 	//find start (birthday)
 	var bday = infobox.find('.bday:first').text();							//find the first bday class
@@ -325,8 +325,16 @@ function parseMetaData(article,windowTitle,newWindowId){
 	if (bday == ''){
 		var year = infobox.find("th:contains('Year'):first").next().text();		//no class, perform text search
 		year = year.replace(/\u2013|\u2014/g, "-");			//change "en" and "em" dashes to hyphens "-"
-		bday = year.replace(/-.*/g, "");
-		dday = year.replace(/.*-/g, "");
+		var reYY = new RegExp(/\d+-\d+/);
+		var reNum = new RegExp(/\d+/);
+		
+		if (reYY.test(year)){								//"yyyy-yyyy" range format
+			bday = year.replace(/-.*/g, "");
+			dday = year.replace(/.*-/g, "");
+		}
+		else {												//"yyyy" format
+			bday = year;
+		}
 	}
 	
 	
@@ -409,6 +417,17 @@ function parseMetaData(article,windowTitle,newWindowId){
 	if (tagVal != '' && tagVal != null){
 		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
 		objMetadata = {tag: 'Author', val: tagVal};
+		metadata.push(objMetadata);
+	}
+	
+	//find artist
+	tagVal = infobox.find("th:contains('Artist'):first").next().html();		//no class, perform text search
+	if (tagVal == '' || tagVal == null){
+		tagVal = infobox.find("th:contains('artist'):first").next().html();		//check lower case
+	}
+	if (tagVal != '' && tagVal != null){
+		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
+		objMetadata = {tag: 'Artist', val: tagVal};
 		metadata.push(objMetadata);
 	}
 	
