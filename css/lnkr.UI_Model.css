@@ -169,21 +169,7 @@ html, body {
 	/*display:inline
 	*/
 }
-.cButtonD1{
-	width:6px;
-	height:6px;
-	margin-left:5px;
-}
-.cButtonD2{
-	width:8px;
-	height:8px;
-	margin-left:5px;
-}
-.cButtonD3{
-	width:10px;
-	height:10px;
-	margin-left:5px;
-}
+
 .cButtonClose{
 	float:right;
 	width:10px;
@@ -191,15 +177,19 @@ html, body {
 	margin-right:5px;
 }
 
-.buttonArrange{
-	width:20px;
-	height:20px;
+.buttonWindow{
+	width:15px;
+	height:15px;
 	margin-left:5px;
 	border-radius:0px;
 }
 
 .buttonHeader{
 	cursor:pointer;
+	width:25px;
+	height:25px;
+	margin-left:5px;
+	border-radius:0px;
 }
 
 .linkHoverStart{

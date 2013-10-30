@@ -277,6 +277,7 @@ function closeWindow(el)
 function display1(el)
 {
 	//Title only (display1)
+	el.find('.display1').css('display', 'block');
 	el.find('.display2').css('display', 'none');
 	el.find('.display3').css('display', 'none');
 	jsPlumb.repaint(el);
@@ -284,6 +285,7 @@ function display1(el)
 function display2(el)
 {
 	//Title (display1) & image (display2)
+	el.find('.display1').css('display', 'block');
 	el.find('.display2').css('display', 'inline');
 	el.find('.display3').css('display', 'none');
 	jsPlumb.repaint(el);
@@ -291,8 +293,17 @@ function display2(el)
 function display3(el)
 {
 	//all
+	el.find('.display1').css('display', 'block');
 	el.find('.display2').css('display', 'inline');
 	el.find('.display3').css('display', 'inline');
+	jsPlumb.repaint(el);
+};
+function display4(el)
+{
+	//image only
+	el.find('.display1').css('display', 'none');
+	el.find('.display2').css('display', 'inline');
+	el.find('.display3').css('display', 'none');
 	jsPlumb.repaint(el);
 };
 
@@ -300,6 +311,7 @@ function display3(el)
 function display1_all()
 {
 	//Title only (display1)
+	$(document).find('.display1').css('display', 'block');
 	$(document).find('.display2').css('display', 'none');
 	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
@@ -307,6 +319,7 @@ function display1_all()
 function display2_all()
 {
 	//Title (display1) & image (display2)
+	$(document).find('.display1').css('display', 'block');
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
@@ -314,8 +327,17 @@ function display2_all()
 function display3_all()
 {
 	//all
+	$(document).find('.display1').css('display', 'block');
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'inline');
+	jsPlumb.repaintEverything();
+};
+function display4_all()
+{
+	//image (display2)
+	$(document).find('.display1').css('display', 'none');
+	$(document).find('.display2').css('display', 'inline');
+	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
 };
 
@@ -507,9 +529,10 @@ function formatWindow(dataSource, windowTitle, windowId)
 
 	//Add Buttons
 	var windowBody = '<div class="cButton">';
-	windowBody += '<img onclick="display1($(this).parents(&quot;.window&quot;));" class="cButtonD1" src="img/circle-icon.png" />';
-	windowBody += '<img onclick="display2($(this).parents(&quot;.window&quot;));" class="cButtonD2" src="img/circle-icon.png" />';
-	windowBody += '<img onclick="display3($(this).parents(&quot;.window&quot;));" class="cButtonD3" src="img/circle-icon.png" />';
+	windowBody += '<img onclick="display1($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_title.png" />';
+	windowBody += '<img onclick="display4($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_icon.png" />';
+	windowBody += '<img onclick="display2($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_icon_title.png" />';
+	windowBody += '<img onclick="display3($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_detail.png" />';
 	windowBody += '<img class="cButtonClose" onclick="closeWindow($(this).parents(&quot;.window&quot;));" src="img/Button_Icon_Red.svg.png" />';
 	windowBody += '</div>';
 	
@@ -519,7 +542,7 @@ function formatWindow(dataSource, windowTitle, windowId)
 	windowBody += '</div>';
 	
 	//Add Title container
-	windowBody += '<h1> Loading... </h1>';
+	windowBody += '<h1 class="display1"> Loading... </h1>';
 	
 	//Add Data Source info
 	windowBody += '<div class="debugId dataSource">' + dataSource + '</div>';
