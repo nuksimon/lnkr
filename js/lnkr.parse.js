@@ -93,6 +93,8 @@ function searchArticle(dataSource, windowTitle)
 	});	
 };
 
+// ---------------- End of TEST Functions --------------------------------------------------------------
+
 
 
 
@@ -101,7 +103,7 @@ function searchArticle(dataSource, windowTitle)
 
 // ----------------- Parse Functions ----------------------------------------------------
 
-//case insenstive contains selector
+//case insenstive "contains" selector
 //http://css-tricks.com/snippets/jquery/make-jquery-contains-case-insensitive/
 $.expr[":"].containsCi = $.expr.createPseudo(function(arg) {
     return function( elem ) {
@@ -117,7 +119,7 @@ $.expr[":"].containsCi = $.expr.createPseudo(function(arg) {
 	OUTPUT
 		-arrLink = array of hyperlinks found in the article, weighted by relevance
 */
-function parseLinks(article, dataSource, windowTitle, windowId)
+function parseLinks(article, dataSource, windowId)
 {
 	/* objLink = object that stores the link's scores and weight
 			-name = link's name
@@ -301,7 +303,7 @@ function SortByWeight(a, b){
 
 
 //Parse the infobox for MetaData
-function parseMetaData(article,windowTitle,newWindowId){
+function parseMetaData(article, windowId){
 
 	var metadata = [];	//array of tag-value pairs
 	var objMetadata;	//{tag, val}
@@ -368,10 +370,7 @@ function parseMetaData(article,windowTitle,newWindowId){
 	dday = dday.replace(/,.*/g, "");
 
 	
-	
-	
 	if (bday != '' && bday != null){
-		//var bdayDate = new Date(bday);
 		objMetadata = {tag: 'Start', val: bday};
 		metadata.push(objMetadata);
 	}
@@ -382,30 +381,28 @@ function parseMetaData(article,windowTitle,newWindowId){
 	
 	
 	//find tags
-	metadata = findTag('Known for', ['work','known'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Origin', ['origin'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Members', ['members','starring','founder'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Author', ['author'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Artist', ['artist'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Associated acts', ['associated acts'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Genre', ['genre','style','movement'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Label', ['label'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Publisher', ['publisher'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Directed by', ['directed'], metadata, infobox, windowTitle, newWindowId);
-	metadata = findTag('Produced by', ['produced'], metadata, infobox, windowTitle, newWindowId);
-	
+	metadata = findTag('Known for', ['work','known'], metadata, infobox, windowId);
+	metadata = findTag('Origin', ['origin'], metadata, infobox, windowId);
+	metadata = findTag('Members', ['members','starring','founder'], metadata, infobox, windowId);
+	metadata = findTag('Author', ['author'], metadata, infobox, windowId);
+	metadata = findTag('Artist', ['artist'], metadata, infobox, windowId);
+	metadata = findTag('Associated acts', ['associated acts'], metadata, infobox, windowId);
+	metadata = findTag('Genre', ['genre','style','movement'], metadata, infobox, windowId);
+	metadata = findTag('Label', ['label'], metadata, infobox, windowId);
+	metadata = findTag('Publisher', ['publisher'], metadata, infobox, windowId);
+	metadata = findTag('Directed by', ['directed'], metadata, infobox, windowId);
+	metadata = findTag('Produced by', ['produced'], metadata, infobox, windowId);
 	
 	return metadata;
 };
 
 //perform text search on an array of key words.  push the results to the metadata array
-function findTag(tagName, arrSearch, metadata, data, windowTitle, windowId){
+function findTag(tagName, arrSearch, metadata, data, windowId){
 /*	tagName 	= tag's name in window
 	arrSearch 	= array of keywords to search for
 	metadata 	= array of tag-value pairs
 	data 		= html element to search
-	windowTitle = title of main window (for lnk build)
-	windowId 	= id of main window (for lnk build)
+	windowId 	= id of source window (for lnk build)
 */
 
 	var tagVal;
@@ -460,8 +457,7 @@ function convertMonthNameToNumber(monthName) {
 //check if the date is text ('20 January 1998') and convert to number ('1998-01-20') else return original
 function convertTextDateToNumber(checkDate){
 
-	var reTextDateDMY = new RegExp(/[0-9]+( |.[0-9]+ )[a-z]+ [0-9]+/gi);			//dd Month yyyy  i.e. '20 January 1998'
-	//var reTextDateDDMY = new RegExp(/[0-9]+.[0-9]+ [a-z]+ [0-9]+/gi);	//dd-dd Month yyyy  i.e. '20-21 January 1998'
+	var reTextDateDMY = new RegExp(/[0-9]+( |.[0-9]+ )[a-z]+ [0-9]+/gi);	//dd Month yyyy  i.e. '20 January 1998' or '20-21 January 1998'
 	var reTextDateMDY = new RegExp(/[a-z]+ [0-9]+, [0-9]+/gi);			//Month dd, yyyy i.e. 'January 20, 1998'
 	var reNum = new RegExp(/\d+/);										//filter the first group of #s
 	

@@ -82,7 +82,7 @@ function createWindowFromSearch()
 	//get the article title from the search box
 	var windowTitle = document.getElementById('searchFormText').value;
 
-	//create the new window
+	//create the new window (sourceWindowId = 0 when from search)
 	createWindow(dataSource, windowTitle, 0);
 }
 
@@ -168,7 +168,7 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		wikipage.find('sup').remove();			//removes reference tags
 		wikipage.find('.error').remove();		//removes cite error message
 		wikipage.find('a').each(function() {
-			//replace hyperlinks with internal links
+			//replace hyperlinks with internal links <lnk>
 			var linkName = $(this).attr('title');
 			var linkText = $(this).html();
 			$(this).replaceWith(buildLnk(linkName, newWindowId, linkText));
@@ -184,31 +184,25 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		$('#'+newWindowId).find('.cSummary').append(windowBody);
 		
 		
-		//parse the links
+		//parse the Links and append
 		var arrLink = [];
-		arrLink = parseLinks(data, dataSource, windowTitle, newWindowId);
-		
-		//Append the link results to the body
-		var outputHTML = formatLinks(arrLink);
+		arrLink = parseLinks(data, dataSource, newWindowId);			//array of link objects
+		var outputHTML = formatLinks(arrLink);							//turn into a table
 		$('#'+newWindowId).find('.cLinks').append(outputHTML);
 		
-		
 		//parse the MetaData and append
-		outputHTML = formatMetadata(parseMetaData(data,windowTitle,newWindowId));
+		outputHTML = formatMetadata(parseMetaData(data, newWindowId));
 		$('#'+newWindowId).find('.cMetaData').append(outputHTML);
 		
 		
 		
 		//Draw internal links to existing windows
 		for (i = 0, l = Math.min(arrLink.length, maxLinks); i < l; i++) {
-			//alert(arrLink[i].name);
 			drawLinksByName(arrLink[i].name, newWindowId, false);			
 		}
 		//Draw external links to this window
 		drawExternalLinksByName(windowTitle, newWindowId);	
 	});
-	
-
 };
 
 
@@ -228,9 +222,7 @@ function findWindowPosition(sourceWindowId)
 	var spaceTop = new Array(0, pxTop, pxTop, pxTop, 0, -1*pxTop, -1*pxTop, -1*pxTop);
 	
 	
-	
 	if (sourceWindowId != 0){
-
 		//get the position from the source
 		var pos = $('#'+sourceWindowId).position();
 		windowPos.left = pos.left + spaceLeft[0];
@@ -245,7 +237,6 @@ function findWindowPosition(sourceWindowId)
 		}
 	}
 	return windowPos;
-
 }
 
 //check all windows to see if they overlap with the coordinates
@@ -275,79 +266,71 @@ function isWindowOverlap(top,left)
 
 //------------------------- Buttons ----------------------------------------------------
 
-
 function closeWindow(el)
-{
+{	//close the active window
 	jsPlumb.detachAllConnections(el.attr('id'));
 	el.remove();
 }
 
 
 
-//---------------- Display UI control ---------------------------------------------
+//---------------- Display UI control ------------------------------------------------
 
-//--- Change the display type for a given element
+//--- Change the display type for A GIVEN element
 function display1(el)
-{
-	//Title only (display1)
+{	//Title only (display1)
 	el.find('.display1').css('display', 'block');
 	el.find('.display2').css('display', 'none');
 	el.find('.display3').css('display', 'none');
 	jsPlumb.repaint(el);
 };
 function display2(el)
-{
-	//Title (display1) & image (display2)
+{	//Title (display1) & image (display2)
 	el.find('.display1').css('display', 'block');
 	el.find('.display2').css('display', 'inline');
 	el.find('.display3').css('display', 'none');
 	jsPlumb.repaint(el);
 };
 function display3(el)
-{
-	//all
+{	//all
 	el.find('.display1').css('display', 'block');
 	el.find('.display2').css('display', 'inline');
 	el.find('.display3').css('display', 'inline');
 	jsPlumb.repaint(el);
 };
 function display4(el)
-{
-	//image only
+{	//image only
 	el.find('.display1').css('display', 'none');
 	el.find('.display2').css('display', 'inline');
 	el.find('.display3').css('display', 'none');
 	jsPlumb.repaint(el);
 };
 
-//--- Change the display type for all elements
+
+//--- Change the display type for ALL elements
 function display1_all()
-{
-	//Title only (display1)
+{	//Title only (display1)
 	$(document).find('.display1').css('display', 'block');
 	$(document).find('.display2').css('display', 'none');
 	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
 };
 function display2_all()
-{
-	//Title (display1) & image (display2)
+{	//Title (display1) & image (display2)
 	$(document).find('.display1').css('display', 'block');
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
 };
 function display3_all()
-{
-	//all
+{	//all
 	$(document).find('.display1').css('display', 'block');
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'inline');
 	jsPlumb.repaintEverything();
 };
 function display4_all()
-{
-	//image (display2)
+{	//image only (display2)
 	$(document).find('.display1').css('display', 'none');
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'none');
@@ -355,36 +338,32 @@ function display4_all()
 };
 
 
-
+//--- Toggle the info sections
 function displaySummary(el)
-{
-	//toggle Summary
+{	//toggle Summary
 	if(el.find('.cSummary').css('display') == 'none'){
 		el.find('.cSummary').css('display', 'block');
 	} else {
 		el.find('.cSummary').css('display', 'none');
 	}
 };
-
 function displayLinks(el)
-{
-	//toggle Links
+{	//toggle Links
 	if(el.find('.cLinks').css('display') == 'none'){
 		el.find('.cLinks').css('display', 'block');
 	} else {
 		el.find('.cLinks').css('display', 'none');
 	}
 };
-
 function displayMetaData(el)
-{
-	//toggle MetaData
+{	//toggle MetaData
 	if(el.find('.cMetaData').css('display') == 'none'){
 		el.find('.cMetaData').css('display', 'block');
 	} else {
 		el.find('.cMetaData').css('display', 'none');
 	}
 };
+
 
 
 //------------------------ Window hover graphics ----------------------------
@@ -408,8 +387,10 @@ function hoverWindowStop(el)
 };
 
 
-//---------------- link processing -------------------------------------
 
+
+
+//---------------------- link processing ----------------------------------------
 
 function toggleLinksByName(destArticleName, window_id){
 /*	FUNCTION:
@@ -500,18 +481,26 @@ function drawLinksByName(destArticleName, window_id, flagDetatch){
 
 
 
-//draw links from existing articles to the new article
-function drawExternalLinksByName(articleName, window_id){
-	
+function drawExternalLinksByName(articleName, windowId){
+/*	FUNCTION:
+	find any links from existing articles to the new article
+	draw the links
+
+	INPUT:
+	articleName = title of the source window we are connecting to
+	windowId = id of the source window
+
+	OUTPUT: none
+*/	
 	$('.window').find('.linkName').each(function()		//get the article name for each open window
 	{
 		var iArticleName = $(this).text();			//iterating Article Name
-		var iWindow_id = $(this).parents('.window').attr('id');	//iterating Window
+		var iWindowId = $(this).parents('.window').attr('id');	//iterating Window
 		
-		if(iWindow_id != window_id){		//not a self match
+		if(iWindowId != windowId){		//not a self match
 			if(iArticleName == articleName){
 				//found a match between source and destination links, draw the connection
-				jsPlumb.connect({source:window_id, target:iWindow_id, anchor:"AutoDefault", detachable:false, reattach:true});
+				jsPlumb.connect({source:windowId, target:iWindowId, anchor:"AutoDefault", detachable:false, reattach:true});
 			}
 		}
 	});
