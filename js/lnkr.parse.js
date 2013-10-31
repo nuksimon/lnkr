@@ -313,25 +313,25 @@ function parseMetaData(article,windowTitle,newWindowId){
 	//find start (birthday)
 	var bday = infobox.find('.bday:first').text();							//find the first bday class
 	if (bday == ''){
-		bday = infobox.find("th:contains('Born'):first").next().text();		//no class, perform text search
+		bday = infobox.find("th:containsCi('Born'):first").next().text();		//no class, perform text search
 	}
 	if (bday == ''){
-		bday = infobox.find("th:contains('Publication date'):first").next().text();		//books
+		bday = infobox.find("th:containsCi('Publication date'):first").next().text();		//books
 	}
 	if (bday == ''){
-		bday = infobox.find("th:contains('Release'):first").next().text();		//movie/album
+		bday = infobox.find("th:containsCi('Release'):first").next().text();		//movie/album
 	}
 	
 	
 	//find end (death day)
 	var dday = infobox.find('.dday:first').text();							//find the first dday class
 	if (dday == ''){
-		dday = infobox.find("th:contains('Died'):first").next().text();		//no class, perform text search
+		dday = infobox.find("th:containsCi('Died'):first").next().text();		//no class, perform text search
 	}
 	
 	//check for Year
 	if (bday == ''){
-		var year = infobox.find("th:contains('Year'):first").next().text();		//no class, perform text search
+		var year = infobox.find("th:containsCi('Year'):first").next().text();		//no class, perform text search
 		year = year.replace(/\u2013|\u2014/g, "-");			//change "en" and "em" dashes to hyphens "-"
 		var reYY = new RegExp(/\d+-\d+/);
 		var reNum = new RegExp(/\d+/);
@@ -379,82 +379,43 @@ function parseMetaData(article,windowTitle,newWindowId){
 	}
 	
 	
-	
-	//find works
-	tagVal = infobox.find("th:containsCi('WORK'):first").next().html();		//no class, perform text search
-	if (tagVal == '' || tagVal == null){
-		tagVal = infobox.find("th:contains('Work'):first").next().html();		//check upper case
-	}
-	if (tagVal == '' || tagVal == null){
-		tagVal = infobox.find("th:contains('Known'):first").next().html();		//known for
-	}
-	if (tagVal != '' && tagVal != null){
-		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
-		objMetadata = {tag: 'Known for', val: tagVal};
-		metadata.push(objMetadata);
-	}
+	//find tags
+	metadata = findTag('Known for', ['work','known'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Origin', ['origin'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Members', ['members','starring','founder'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Author', ['author'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Artist', ['artist'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Associated acts', ['associated acts'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Genre', ['genre','style','movement'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Label', ['label'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Publisher', ['publisher'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Directed by', ['directed'], metadata, infobox, windowTitle, newWindowId);
+	metadata = findTag('Produced by', ['produced'], metadata, infobox, windowTitle, newWindowId);
 	
 	
-	//find origin
-	tagVal = infobox.find("th:contains('Origin'):first").next().html();		//no class, perform text search
-	if (tagVal != '' && tagVal != null){
-		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
-		objMetadata = {tag: 'Origin', val: tagVal};
-		metadata.push(objMetadata);
-	}
-	
-	//find members
-	tagVal= infobox.find("th:contains('Members'):first").next().html();		//no class, perform text search
-	if (tagVal == '' || tagVal == null){
-		tagVal = infobox.find("th:contains('members'):first").next().html();		//check lower case
-	}
-	if (tagVal == '' || tagVal == null){
-		tagVal = infobox.find("th:contains('Starring'):first").next().html();		//check lower case
-	}
-	if (tagVal != '' && tagVal != null){
-		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
-		objMetadata = {tag: 'Members', val: tagVal};
-		metadata.push(objMetadata);
-	}
-	
-	//find author
-	tagVal = infobox.find("th:contains('Author'):first").next().html();		//no class, perform text search
-	if (tagVal == '' || tagVal == null){
-		tagVal = infobox.find("th:contains('author'):first").next().html();		//check lower case
-	}
-	if (tagVal != '' && tagVal != null){
-		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
-		objMetadata = {tag: 'Author', val: tagVal};
-		metadata.push(objMetadata);
-	}
-	
-	//find artist
-	tagVal = infobox.find("th:contains('Artist'):first").next().html();		//no class, perform text search
-	if (tagVal == '' || tagVal == null){
-		tagVal = infobox.find("th:contains('artist'):first").next().html();		//check lower case
-	}
-	if (tagVal != '' && tagVal != null){
-		tagVal = internalLinks(tagVal, windowTitle, newWindowId);
-		objMetadata = {tag: 'Artist', val: tagVal};
-		metadata.push(objMetadata);
-	}
-	
-	//find genre
-	var genre = infobox.find("th:contains('Genre'):first").next().html();		//no class, perform text search
-	if (genre == '' || genre == null){
-		genre = infobox.find("th:contains('Style'):first").next().html();		
-	}
-	if (genre == '' || genre == null){
-		genre = infobox.find("th:contains('Movement'):first").next().html();		
-	}
-	if (genre != '' && genre != null){
-		genre = internalLinks(genre, windowTitle, newWindowId);
-		objMetadata = {tag: 'Genre', val: genre};
-		metadata.push(objMetadata);
-	}
+	return metadata;
+};
 
-	
-	
+//perform text search on an array of key words.  push the results to the metadata array
+function findTag(tagName, arrSearch, metadata, data, windowTitle, windowId){
+/*	tagName 	= tag's name in window
+	arrSearch 	= array of keywords to search for
+	metadata 	= array of tag-value pairs
+	data 		= html element to search
+	windowTitle = title of main window (for lnk build)
+	windowId 	= id of main window (for lnk build)
+*/
+
+	var tagVal;
+	for (i = 0, l = arrSearch.length; i < l; i++) {
+		tagVal = data.find("th:containsCi("+arrSearch[i]+"):first").next().html();	//look for the search term	
+
+		if (tagVal != '' && tagVal != null){						//tag found; update lnk, push to array and exit loop (skip the rest of the search terms)
+			tagVal = internalLinks(tagVal, windowTitle, windowId);
+			metadata.push({tag: tagName, val: tagVal});
+			break;
+		}
+	}
 	return metadata;
 };
 
