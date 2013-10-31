@@ -117,6 +117,8 @@ html, body {
 .window h1{
 	color:SteelBlue;
 	margin: 0px;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .window h2{
 	text-align:left;

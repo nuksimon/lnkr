@@ -552,7 +552,7 @@ function formatWindow(dataSource, windowTitle, windowId)
 	windowBody += '</div>';
 	
 	//Add Title container
-	windowBody += '<h1 class="display1"> Loading... </h1>';
+	windowBody += '<div><h1 class="display1"> Loading... </h1></div>';
 	
 	//Add Data Source info
 	windowBody += '<div class="debugId dataSource">' + dataSource + '</div>';
