@@ -101,6 +101,14 @@ function searchArticle(dataSource, windowTitle)
 
 // ----------------- Parse Functions ----------------------------------------------------
 
+//case insenstive contains selector
+//http://css-tricks.com/snippets/jquery/make-jquery-contains-case-insensitive/
+$.expr[":"].containsCi = $.expr.createPseudo(function(arg) {
+    return function( elem ) {
+        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+});
+
 
 /*Parse the links in the article
 	INPUTS
@@ -373,7 +381,7 @@ function parseMetaData(article,windowTitle,newWindowId){
 	
 	
 	//find works
-	tagVal = infobox.find("th:contains('work'):first").next().html();		//no class, perform text search
+	tagVal = infobox.find("th:containsCi('WORK'):first").next().html();		//no class, perform text search
 	if (tagVal == '' || tagVal == null){
 		tagVal = infobox.find("th:contains('Work'):first").next().html();		//check upper case
 	}

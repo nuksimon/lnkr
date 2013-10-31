@@ -59,11 +59,17 @@ jsPlumb.bind("ready", function() {
 
 
 //handle enter key on search
-$('#searchFormText').keyup(function(event){
-	if(event.keyCode == 13){
-		$('#searchFormButton').click();
-	}
+$(document).keypress(function(e) {
+    if(e.which == 13) {
+        $('#searchFormButton').click();
+    }
 });
+function notEnterKey(e){
+	//false if it is the enter key (overrides the submit form)
+	if(e.which == 13) { return false;} 
+	else { return true;}
+};
+
 
 
 //action from Search box to get a new article
@@ -156,6 +162,9 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		// parse first paragraph
 		wikipage = $('<div>'+data.parse.text['*']+'</div>').children('p:first');
+		if ($(wikipage).find('#coordinates').length > 0){								//p:first is used by the coords, take the next
+			wikipage = $('<div>'+data.parse.text['*']+'</div>').children('p:nth(1)');
+		}
 		wikipage.find('sup').remove();			//removes reference tags
 		wikipage.find('.error').remove();		//removes cite error message
 		wikipage.find('a').each(function() {

@@ -12,7 +12,7 @@
 				
 				<!-- Search -->
 				<form id="searchForm">
-					<input type="text" name="search" id="searchFormText" value="Leonardo da Vinci">
+					<input type="text" name="search" id="searchFormText" value="Leonardo da Vinci" onkeypress="return notEnterKey(event)">
 					<input type="button" id="searchFormButton" onclick="createWindowFromSearch()" value="Search">
 				</form>
 				<select  id="dropSource" onchange="updateAutocomplete()" class="dropDown"></select>
@@ -149,15 +149,6 @@
 			var data_source_url
 		</script>
 		
-		
-		
-		<!-- Test Display --
-		<script type="text/javascript">
-			$(document).ready(display2($('#window5')));
-			$(document).ready(display2($('#window6')));
-
-		</script>
-		-->
 
 	</body>
 </html>
