@@ -171,7 +171,7 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 			//replace hyperlinks with internal links
 			var linkName = $(this).attr('title');
 			var linkText = $(this).html();
-			$(this).replaceWith(buildLnk(windowTitle, linkName, newWindowId, linkText));
+			$(this).replaceWith(buildLnk(linkName, newWindowId, linkText));
 		});
 	
 		//append to the Summary container
@@ -192,17 +192,20 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		var outputHTML = formatLinks(arrLink);
 		$('#'+newWindowId).find('.cLinks').append(outputHTML);
 		
-		//connect internal links to existing windows
-		for (i = 0, l = Math.min(arrLink.length, maxLinks); i < l; i++) {
-			drawLinksByName(arrLink[i].name, newWindowId, false);			
-		}
-		
-		drawExternalLinksByName(windowTitle, newWindowId);	//connect external links to this window
-		
 		
 		//parse the MetaData and append
 		outputHTML = formatMetadata(parseMetaData(data,windowTitle,newWindowId));
 		$('#'+newWindowId).find('.cMetaData').append(outputHTML);
+		
+		
+		
+		//Draw internal links to existing windows
+		for (i = 0, l = Math.min(arrLink.length, maxLinks); i < l; i++) {
+			//alert(arrLink[i].name);
+			drawLinksByName(arrLink[i].name, newWindowId, false);			
+		}
+		//Draw external links to this window
+		drawExternalLinksByName(windowTitle, newWindowId);	
 	});
 	
 
@@ -408,9 +411,19 @@ function hoverWindowStop(el)
 //---------------- link processing -------------------------------------
 
 
-//toggle links on click using the article name.  create a new window if it does not exist
-function toggleLinksByName(articleName, destArticleName, window_id){
-		
+function toggleLinksByName(destArticleName, window_id){
+/*	FUNCTION:
+	toggle link drawing on click using the article name.  
+	create a new window if it does not exist
+
+	INPUT:
+	articleName
+	destArticleName = title of the destination article we are searching for
+	window_id = id of the source window
+	
+	OUTPUT:
+	foundArticle = boolean did we find the article
+*/		
 	var foundArticle = false;		//flag - have we found the article on the screen?
 	foundArticle = drawLinksByName(destArticleName, window_id, true);		//draw the links between the article, toggle if necessary
 	
@@ -424,15 +437,26 @@ function toggleLinksByName(articleName, destArticleName, window_id){
 };
 
 
-//draw the links on a new article
+
 function drawLinksByName(destArticleName, window_id, flagDetatch){
-		
+/*	FUNCTION:
+	search all open windows for the destArticleName 
+	draw a link between the articles on a match
+
+	INPUT:
+	destArticleName = title of the destination article we are searching for
+	window_id = id of the source window
+	flagDetach = True allows link toggle, False forces a connection
+	
+	OUTPUT:
+	foundArticle = boolean did we find the article
+*/
 	var foundArticle = false;					//flag - have we found the article on the screen?
-	$('.window').find('h1').each(function()		//find the article name for the destination article
+	$('.window').find('h1').each(function()		//find the article name for the destination article in all open windows
 	{
-		var destWindow_id = $(this).parent().attr('id');	//link destination Window ID
+		var destWindow_id = $(this).parents('.window').attr('id');	//link destination Window ID
 		var destArticleName_i = $(this).text();				//link destination article name found in search
-		var foundConnected = false;			//flag - did we find that the articles were already connected?
+		var foundConnected = false;					//flag - did we find that the articles were already connected?
 		
 		//match
 		if(destArticleName_i == destArticleName){
@@ -498,7 +522,12 @@ function drawExternalLinksByName(articleName, window_id){
 
 
 
+
+
+
+
 //------------ format data -----------------------------------------------------
+
 function formatMetadata(metadata)
 {
 	//INPUT:	array of metadata objects {tag, val}
@@ -552,7 +581,7 @@ function formatWindow(dataSource, windowTitle, windowId)
 	windowBody += '</div>';
 	
 	//Add Title container
-	windowBody += '<div><h1 class="display1"> Loading... </h1></div>';
+	windowBody += '<h1 class="display1"> Loading... </h1>';
 	
 	//Add Data Source info
 	windowBody += '<div class="debugId dataSource">' + dataSource + '</div>';

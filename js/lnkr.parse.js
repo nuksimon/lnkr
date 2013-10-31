@@ -244,7 +244,7 @@ function parseLinks(article, dataSource, windowTitle, windowId)
 		}
 		
 		//add the internal link 
-		arrLink[i].lnk = buildLnk(windowTitle, arrLink[i].name, windowId, arrLink[i].name);
+		arrLink[i].lnk = buildLnk(arrLink[i].name, windowId, arrLink[i].name);
 		
 	}
 	
@@ -359,6 +359,8 @@ function parseMetaData(article,windowTitle,newWindowId){
 	bday = convertTextDateToNumber(bday);		//check for "text" dates, i.e. '20 January 1998'
 	dday = convertTextDateToNumber(dday);
 	
+	//alert(bday + " _ " + dday);
+	
 	bday = bday.replace(/\s.*/g, "");			//removes everything after the space (" ")
 	dday = dday.replace(/\s.*/g, "");		
 	
@@ -411,7 +413,7 @@ function findTag(tagName, arrSearch, metadata, data, windowTitle, windowId){
 		tagVal = data.find("th:containsCi("+arrSearch[i]+"):first").next().html();	//look for the search term	
 
 		if (tagVal != '' && tagVal != null){						//tag found; update lnk, push to array and exit loop (skip the rest of the search terms)
-			tagVal = internalLinks(tagVal, windowTitle, windowId);
+			tagVal = internalLinks(tagVal, windowId);
 			metadata.push({tag: tagName, val: tagVal});
 			break;
 		}
@@ -421,23 +423,23 @@ function findTag(tagName, arrSearch, metadata, data, windowTitle, windowId){
 
 
 //turn hyperlinks into internal links
-function internalLinks(el, windowTitle, windowId)
+function internalLinks(el, windowId)
 {
 	el = $('<div>' + el + '</div>');
 	el.find('a').each(function() {
 		//replace hyperlinks with internal links
 		var linkName = $(this).attr('title');
 		var linkText = $(this).html();	
-		$(this).replaceWith(buildLnk(windowTitle, linkName, windowId, linkText));
+		$(this).replaceWith(buildLnk(linkName, windowId, linkText));
 	});
 	return el.html();
 };
 
 
 //build the <lnk> element
-function buildLnk(windowTitle, linkName, windowId, linkText)
+function buildLnk(linkName, windowId, linkText)
 {
-	return '<lnk onclick="toggleLinksByName(&quot;'+windowTitle+'&quot;, &quot;'+ linkName +'&quot;, &quot;'+windowId+'&quot;)">' + linkText + '</lnk>';
+	return '<lnk onclick="toggleLinksByName(&quot;'+ linkName +'&quot;, &quot;'+windowId+'&quot;)">' + linkText + '</lnk>';
 };
 
 
