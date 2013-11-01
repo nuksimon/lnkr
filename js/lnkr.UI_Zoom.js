@@ -14,7 +14,7 @@ window.addEventListener("mousewheel",function(){
 	//var mouseY = e.pageY - $(window).scrollTop();
 	var mouseX = e.pageX;
 	var mouseY = e.pageY;
-	var zoom_pos_scale = 0.6;
+	var zoom_pos_scale = 0.75;
 	var zoom_pos_offsetX = 50;
 	var zoom_pos_offsetY = 50;
 	//alert($(window).height() + " : " + $(window).width());
