@@ -83,7 +83,7 @@ html, body {
 .window_zoom4 { 
 	width:10em; 
 	min-height:1em; 
-	font-size:0.6em;
+	font-size:0.55em;
 }
 
 .img_zoom1{
@@ -126,6 +126,8 @@ html, body {
 	margin: 0px;
 	background-color:SteelBlue;
 	color:white;
+	border-radius:2px;
+	padding-left:5px;
 }
 .window p{
 	text-align:left;
@@ -145,7 +147,20 @@ html, body {
 
 .scrollBarY {
 	max-height: 100px;
-	overflow-y: scroll;
+	overflow-y: auto;
+}
+/*only for webkit browsers (Chrome,Safari)*/
+.scrollBarY::-webkit-scrollbar {
+    width: 6px;
+	height: 5px;
+}
+.scrollBarY::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+}
+.scrollBarY::-webkit-scrollbar-thumb {
+	background:SteelBlue;
+	opacity:0.5; 
+	border-radius:2px;
 }
 
 .cSummary{
