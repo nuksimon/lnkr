@@ -347,34 +347,14 @@ function parseMetaData(article, windowId){
 		}
 	}
 	
-	
-	//cleanup start and end
-	bday = bday.replace(/c(\.|a|a\.)\s/g, "");			//removes the "c(a.) " at the start of some dates
-	dday = dday.replace(/c(\.|a|a\.)\s/g, "");
-	
-	bday = bday.replace(/before /g, "");			//removes the "before" at the start of some dates
-	dday = dday.replace(/before /g, "");
-	
-	bday = bday.replace(/ \(.*/g, "");			//removes everything after the space+bracket (" (")
-	dday = dday.replace(/ \(.*/g, "");
 
-	bday = convertTextDateToNumber(bday);		//check for "text" dates, i.e. '20 January 1998'
-	dday = convertTextDateToNumber(dday);
-	
-	//alert(bday + " _ " + dday);
-	
-	bday = bday.replace(/\s.*/g, "");			//removes everything after the space (" ")
-	dday = dday.replace(/\s.*/g, "");		
-	
-	bday = bday.replace(/,.*/g, "");			//removes everything after the comma (",")
-	dday = dday.replace(/,.*/g, "");
-
-	
 	if (bday != '' && bday != null){
+		bday = cleanDate(bday);	
 		objMetadata = {tag: 'Start', val: bday};
 		metadata.push(objMetadata);
 	}
 	if (dday != '' && dday != null){
+		dday = cleanDate(dday);	
 		objMetadata = {tag: 'End', val: dday};
 		metadata.push(objMetadata);
 	}
@@ -457,8 +437,9 @@ function convertMonthNameToNumber(monthName) {
 //check if the date is text ('20 January 1998') and convert to number ('1998-01-20') else return original
 function convertTextDateToNumber(checkDate){
 
-	var reTextDateDMY = new RegExp(/[0-9]+( |.[0-9]+ )[a-z]+ [0-9]+/gi);	//dd Month yyyy  i.e. '20 January 1998' or '20-21 January 1998'
+	var reTextDateDMY = new RegExp(/[0-9]+( |.[0-9]+ | or [0-9]+ )[a-z]+ [0-9]+/gi);	//dd Month yyyy  i.e. '20 January 1998' or '20-21 January 1998' or '20 or 21 January 1998'
 	var reTextDateMDY = new RegExp(/[a-z]+ [0-9]+, [0-9]+/gi);			//Month dd, yyyy i.e. 'January 20, 1998'
+	var reTextDateMY = new RegExp(/[a-z]+ [0-9]+/gi);					//Month yyyy i.e. 'January 1998'
 	var reNum = new RegExp(/\d+/);										//filter the first group of #s
 	
 	//dd Month yyyy
@@ -466,7 +447,9 @@ function convertTextDateToNumber(checkDate){
 		var reYear = new RegExp(/\s\d+/);							//gets the year (#s after a space)
 		var reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
 		var reDay = new RegExp(/\d+\s/);							//gets the day (first #s)
-	
+		
+		checkDate = checkDate.replace(/ or [0-9]+/, "");			//remove the "or ##" day in the date
+		
 		var tempDate = reYear.exec(checkDate);
 		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
 		tempDate += "-" + reDay.exec(checkDate);
@@ -485,6 +468,83 @@ function convertTextDateToNumber(checkDate){
 		checkDate = tempDate.replace(/\s/g, "");
 		//alert('2: "'+checkDate+'"');
 	}
+	//Month yyyy
+	else if (reTextDateMY.test(checkDate)){
+		var reYear = new RegExp(/\s\d+/);							//gets the year (#s after a space)
+		var reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
+		
+		var tempDate = reNum.exec(reYear.exec(checkDate));
+		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
+		checkDate = tempDate.replace(/\s/g, "");
+	}
+	
+	checkDate = checkDate.replace(/s/gi, "");	//removes the "s" as in 1300s
 	
 	return checkDate;
 }
+
+
+//check if the date is < 1000 ('350-10-10') and zero pad to 4 digit year ('0350-10-10')
+function zeroPadYear(checkDate)
+{
+	var reYear = new RegExp(/\d+/);
+	var checkYear = reYear.exec(checkDate);
+	
+	if (checkYear < 1000){
+		if (checkYear < 100){
+			checkYear = '0' + checkYear;
+		}
+		checkYear = '0' + checkYear;
+		var remainderDate = checkDate.replace(/\d+/, "");
+		checkDate = checkYear + remainderDate;
+	}	
+	return checkDate;
+};
+
+
+//see if there is an epoch tag in the date string
+function findEpoch(checkDate){
+	var reCE = new RegExp(/\s(CE|AD)/);
+	var reBCE = new RegExp(/\s(BCE|BC)/);
+	
+	if(reCE.test(checkDate)){
+		return 1;		//found CE
+	}
+	else if (reBCE.test(checkDate)){
+		return -1;		//found BCE
+	}
+	else {
+		return 0; 		//no epoch found
+	}
+};
+
+//remove the BC, etc epoch tag from the date string
+function removeEpoch(checkDate){
+	checkDate = checkDate.replace(/\s(CE|AD|BCE|BC)/, "");
+	return checkDate;
+};
+
+
+//cleanup the date string
+function cleanDate(checkDate){
+	
+	checkDate = checkDate.replace(/c(\.|a|a\.)\s/g, "");	//removes the "c(a.) " at the start of some dates	
+	checkDate = checkDate.replace(/before /g, "");			//removes the "before" at the start of some dates
+	checkDate = checkDate.replace(/ \(.*/g, "");			//removes everything after the space+bracket (" (")
+
+	var epoch = findEpoch(checkDate);						//0=no epoch found, 1=CE, -1=BCE
+	if (epoch != 0){
+		checkDate = removeEpoch(checkDate);
+	}
+
+	checkDate = convertTextDateToNumber(checkDate);			//check for "text" dates, i.e. '20 January 1998'
+	checkDate = checkDate.replace(/\s.*/g, "");				//removes everything after the space (" ")
+	checkDate = checkDate.replace(/,.*/g, "");				//removes everything after the comma (",")
+	checkDate = zeroPadYear(checkDate);						//zero pad the year for dates < 1000 ("0034-03-23")
+
+	if (epoch == -1){										//BCE dates must be in -yyyyyy format for js date parse
+		checkDate = '-00'+checkDate;
+	}
+	
+	return checkDate;
+};

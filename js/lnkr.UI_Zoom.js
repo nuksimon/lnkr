@@ -250,6 +250,8 @@ function arrangeWindowChrono(){
 function SortByChrono(a, b){
 	var aDate = new Date(a.start);
 	var bDate = new Date(b.start);
+	//var aDate = a.start;
+	//var bDate = b.start;
 	return ((aDate > bDate) ? 1 : ((aDate < bDate) ? -1 : 0));
 	//return ((a.start > b.start) ? 1 : ((a.start < b.start) ? -1 : 0));
 };
