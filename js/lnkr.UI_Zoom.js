@@ -222,7 +222,10 @@ function arrangeWindowChrono(){
 		var wStart = $(this).find('.mdStart:first').text();
 		
 		if (wStart == '' || wStart == null){
-			wStart = -1;
+			wStart = $(this).find('.mdEnd:first').text();	//use the end date if no start date
+			if (wStart == '' || wStart == null){
+				wStart = -1;
+			}
 		}
 		//alert(wId + ' - "' + wStart + '"');
 		objWindow = {id: wId, start: wStart};
@@ -250,8 +253,7 @@ function arrangeWindowChrono(){
 function SortByChrono(a, b){
 	var aDate = new Date(a.start);
 	var bDate = new Date(b.start);
-	//var aDate = a.start;
-	//var bDate = b.start;
+	
 	return ((aDate > bDate) ? 1 : ((aDate < bDate) ? -1 : 0));
 	//return ((a.start > b.start) ? 1 : ((a.start < b.start) ? -1 : 0));
 };

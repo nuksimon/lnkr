@@ -473,7 +473,7 @@ function convertTextDateToNumber(checkDate){
 		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
 		tempDate += "-" + reNum.exec(reDay.exec(checkDate));
 		checkDate = tempDate.replace(/\s/g, "");
-		alert('2: "'+checkDate+'"');
+		//alert('2: "'+checkDate+'"');
 	}
 	//Month yyyy
 	else if (reTextDateMY.test(checkDate)){
@@ -483,7 +483,7 @@ function convertTextDateToNumber(checkDate){
 		var tempDate = reNum.exec(reYear.exec(checkDate));
 		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
 		checkDate = tempDate.replace(/\s/g, "");
-		alert('3: "'+checkDate+'"');
+		//alert('3: "'+checkDate+'"');
 	}
 	
 	checkDate = checkDate.replace(/s/gi, "");	//removes the "s" as in 1300s
