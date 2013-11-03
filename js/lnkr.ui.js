@@ -191,7 +191,9 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		$('#'+newWindowId).find('.cLinks').append(outputHTML);
 		
 		//parse the MetaData and append
-		outputHTML = formatMetadata(parseMetaData(data, newWindowId));
+		var metaData = [];
+		metaData = parseMetaData(data, newWindowId)
+		outputHTML = formatMetadata(metaData);
 		$('#'+newWindowId).find('.cMetaData').append(outputHTML);
 		
 		
@@ -202,6 +204,11 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		}
 		//Draw external links to this window
 		drawExternalLinksByName(windowTitle, newWindowId);	
+		
+		//add to the timeline
+		var startDate = $.grep(metaData, function(e){ return e.tag == 'Start'; });
+		timelineAdd(windowTitle, startDate[0].val);
+		//timelineAdd(windowTitle, "1500-02-12");
 	});
 };
 
