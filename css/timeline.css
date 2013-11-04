@@ -3,6 +3,7 @@ div.timeline-frame {
     overflow: hidden;
 	font-family:helvetica, sans;
 	font-size:0.9em;
+	display: block;
 }
 
 div.timeline-axis {

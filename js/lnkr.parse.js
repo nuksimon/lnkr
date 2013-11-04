@@ -323,6 +323,12 @@ function parseMetaData(article, windowId){
 	if (bday == ''){
 		bday = infobox.find("th:containsCi('Release'):first").next().text();		//movie/album
 	}
+	if (bday == ''){
+		bday = infobox.find("th:containsCi('Created'):first").next().text();		
+	}
+	if (bday == ''){
+		bday = infobox.find("th:containsCi('Signed'):first").next().text();		
+	}
 	
 	
 	//find end (death day)
@@ -442,48 +448,55 @@ function convertTextDateToNumber(checkDate){
 	var reTextDateMY = new RegExp(/[a-z]+ [0-9]+/gi);					//Month yyyy i.e. 'January 1998'
 	var reNum = new RegExp(/\d+/);										//filter the first group of #s
 	
-
+	var reYear;
+	var reTextMonth;				
+	var reDay;
+	var matchDateFormat = false;
+	
 	//dd Month yyyy
-	if (reTextDateDMY.test(checkDate)){	
-		var reYear = new RegExp(/\s\d+/);							//gets the year (#s after a space)
-		var reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
-		var reDay = new RegExp(/\d+\s/);							//gets the day (first #s)
-		var reYearOnly = new RegExp(/\d+/);
-		var tempDate;
-		
-		checkDate = checkDate.replace(/ or [0-9]+/, "");			//remove the "or ##" day in the date
-		
-		if (reTextMonth.test(checkDate)){							//check if there is a month
-			tempDate = reYear.exec(checkDate);
-			tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
-			tempDate += "-" + reDay.exec(checkDate);
-		} else {													//no month (alpha was the "or"), only year
-			tempDate = '' + reYearOnly.exec(checkDate);
+	if (reTextDateDMY.test(checkDate)){
+		reYear = new RegExp(/\s\d+/);							//gets the year (#s after a space)
+		reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
+		reDay = new RegExp(/\d+\s/);							//gets the day (first #s)
+		checkDate = checkDate.replace(/ or [0-9]+/, "");		//remove the "or ##" day in the date
+		if (reTextMonth.test(checkDate) == false){				//no month found (alpha was the "or")
+			reDay = '';
+			reTextMonth = '';
 		}
-
-		checkDate = tempDate.replace(/\s/g, "");									//clean up any spaces
+		matchDateFormat = true;
+		//alert('1: "'+checkDate+'"');
 	}
 	//Month dd, yyyy
 	else if (reTextDateMDY.test(checkDate)){
-		var reYear = new RegExp(/,\s\d+/);							//gets the year (#s after a comma+space)
-		var reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
-		var reDay = new RegExp(/[a-z]\s\d+/);							//gets the day (#s after alpha+space)
-		
-		var tempDate = reNum.exec(reYear.exec(checkDate));						
-		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
-		tempDate += "-" + reNum.exec(reDay.exec(checkDate));
-		checkDate = tempDate.replace(/\s/g, "");
+		reYear = new RegExp(/,\s\d+/);							//gets the year (#s after a comma+space)
+		reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
+		reDay = new RegExp(/[a-z]\s\d+/);						//gets the day (#s after alpha+space)
+		matchDateFormat = true;
 		//alert('2: "'+checkDate+'"');
 	}
 	//Month yyyy
 	else if (reTextDateMY.test(checkDate)){
-		var reYear = new RegExp(/\s\d+/);							//gets the year (#s after a space)
-		var reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
-		
-		var tempDate = reNum.exec(reYear.exec(checkDate));
-		tempDate += "-" + convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
-		checkDate = tempDate.replace(/\s/g, "");
+		reYear = new RegExp(/\s\d+/);							//gets the year (#s after a space)
+		reTextMonth = new RegExp(/[a-z]+/i);					//gets the text month (first alphas)
+		reDay = '';
+		matchDateFormat = true;
 		//alert('3: "'+checkDate+'"');
+	}
+	
+	//perform the date parse
+	if (matchDateFormat == true){
+		var tempDate = reNum.exec(reYear.exec(checkDate));
+		
+		if (reTextMonth != ''){
+			var monthNumber = convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
+			if (monthNumber != '00'){				
+				tempDate += "-" + monthNumber;
+				if (reDay != ''){
+					tempDate += "-" + reNum.exec(reDay.exec(checkDate));
+				}
+			}
+		}
+		checkDate = tempDate.replace(/\s/g, "");
 	}
 	
 	checkDate = checkDate.replace(/s/gi, "");	//removes the "s" as in 1300s
@@ -538,6 +551,7 @@ function cleanDate(checkDate){
 	
 	checkDate = checkDate.replace(/c(\.|a|a\.)\s/g, "");	//removes the "c(a.) " at the start of some dates	
 	checkDate = checkDate.replace(/before /g, "");			//removes the "before" at the start of some dates
+	checkDate = checkDate.replace(/Exhibited in /g, "");			//removes the "text" at the start of some dates
 	checkDate = checkDate.replace(/ \(.*/g, "");			//removes everything after the space+bracket (" (")
 
 	var epoch = findEpoch(checkDate);						//0=no epoch found, 1=CE, -1=BCE

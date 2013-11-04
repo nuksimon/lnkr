@@ -17,17 +17,21 @@
 				</form>
 				<select  id="dropSource" onchange="updateAutocomplete()" class="dropDown"></select>
 				
+				<!-- Timeline buttons -->
+				<span class="spacer"></span>
+				<img onclick='toggleTimeline();' class="buttonArrange buttonHeader" src="img/timeline.png" title="Show/Hide Timeline" />
+				
 				<!-- View buttons -->
 				<span class="spacer"></span>
-				<img onclick='display1_all();' class="buttonView buttonHeader" src="img/view_title.png" />
-				<img onclick='display4_all();' class="buttonView buttonHeader" src="img/view_icon.png" />
-				<img onclick='display2_all();' class="buttonView buttonHeader" src="img/view_icon_title.png" />
-				<img onclick='display3_all();' class="buttonView buttonHeader" src="img/view_detail.png" />
+				<img onclick='display1_all();' class="buttonView buttonHeader" src="img/view_title.png" title="Display Title" />
+				<img onclick='display4_all();' class="buttonView buttonHeader" src="img/view_icon.png" title="Display Image" />
+				<img onclick='display2_all();' class="buttonView buttonHeader" src="img/view_icon_title.png" title="Display Image + Title" />
+				<img onclick='display3_all();' class="buttonView buttonHeader" src="img/view_detail.png" title="Display Details" />
 				
 				<!-- Arrange buttons -->
 				<span class="spacer"></span>
-				<img onclick='arrangeWindowGrid();' class="buttonArrange buttonHeader" src="img/grid3.png" />
-				<img onclick='arrangeWindowChrono();' class="buttonArrange buttonHeader" src="img/clock.png" />
+				<img onclick='arrangeWindowGrid();' class="buttonArrange buttonHeader" src="img/grid3.png" title="Arrange to Grid" />
+				<img onclick='arrangeWindowChrono();' class="buttonArrange buttonHeader" src="img/clock.png" title="Arrange by Time" />
 				
 			</div>
 			

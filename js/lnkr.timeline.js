@@ -49,28 +49,33 @@ function drawVisualization() {
 
 //add an event to the timeline
 function timelineAdd(content, strStart, strEnd) {
-	//alert(strStart + "_" + strEnd);
+	//alert('"' + strStart + '"_"' + strEnd + '"');
 	var range = timeline.getVisibleChartRange();
 	var start = new Date(strStart);
 	var end = new Date(strEnd);
 	var flagDate = true;
+	
+	//alert('"' + start + '"_"' + end + '"');
 
-	if (strStart != '' && strEnd != ''){	//both start and end dates
+	if (start != 'Invalid Date' && end != 'Invalid Date'){	//both start and end dates
 		timeline.addItem({
 			'start': start,
 			'end': end,
 			'content': content
 		});
-	} else if (strStart != ''){			//only start
+		//alert('1: both');
+	} else if (start != 'Invalid Date'){			//only start
 		timeline.addItem({
 			'start': start,
 			'content': content
 		});
-	} else if (strEnd != ''){				//only end
+		//alert('2: start');
+	} else if (end != 'Invalid Date'){				//only end
 		timeline.addItem({
 			'start': end,
 			'content': content
 		});
+		//alert('3: end');
 	} else {							//no date
 		flagDate = false;
 	}
@@ -81,4 +86,16 @@ function timelineAdd(content, strStart, strEnd) {
 			'row': count-1
 		}]);
 	}
+}
+
+
+//toggle the timeline between visible states
+function toggleTimeline() {
+
+	if($('#mytimeline').css('display') == 'none'){
+		$('#mytimeline').css('display', 'block');
+	} else {
+		$('#mytimeline').css('display', 'none');
+	}
+
 }

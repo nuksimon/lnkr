@@ -152,7 +152,7 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		$(imgHTML).each( function(){
 			//take the first "large" image (i.e. skip the wikipeadia icons)			
 			if( $(this).attr('width') >= 60 ) {
-				windowBody = '<img class="cImage img_zoom' + zoom_level +'" src="http:' + $(this).attr('src') + '" />';
+				windowBody = '<img class="cImage img_zoom' + zoom_level +'" src="http:' + $(this).attr('src') + '" title="' + windowTitle +'"/>';
 				$('#'+newWindowId).find('.cImage').append(windowBody);
 				return false;
 			};
