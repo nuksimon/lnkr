@@ -7,7 +7,8 @@
 var zoom_level = 1;
 var zoom_level_min = 1;
 var zoom_level_max = 4;
-window.addEventListener("mousewheel",function(){
+//window.addEventListener("mousewheel",function(){
+document.getElementById('background').addEventListener("mousewheel",function(){
 	
 	var e = window.event
 	//var mouseX = e.pageX - $(window).scrollLeft();
