@@ -146,8 +146,7 @@ function backgroundDragMouseDown(){
 		bdWindowStart.push(bdWindowStartObj);	//place the data in an object and add it to the global array
 	});
 	
-	//TEST: write offset data to the footer
-	$('#footerInfo').html("Left: " + bdStartX + ", Top: " + bdStartY);
+
 	
 	//enable the drag event
 	$('#background').mousemove(backgroundDragMouseMove);
@@ -168,9 +167,6 @@ function backgroundDragMouseUp(){
 //Dragging in action: update the position of all the windows
 function backgroundDragMouseMove(){
 	var e = window.event;	//capture mouse event data
-	
-	//TEST: write offset data to the footer
-	$('#footerInfo').html("Left: " + (bdStartX - e.pageX) + ", Top: " + (bdStartY - e.pageY));
 	
 	//update the position on each window in the bdWindowStart array
 	for (i = 0, l = bdWindowStart.length; i < l; i++) {

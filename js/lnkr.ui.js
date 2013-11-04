@@ -207,8 +207,21 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		//add to the timeline
 		var startDate = $.grep(metaData, function(e){ return e.tag == 'Start'; });
-		timelineAdd(windowTitle, startDate[0].val);
-		//timelineAdd(windowTitle, "1500-02-12");
+		var endDate = $.grep(metaData, function(e){ return e.tag == 'End'; });
+		if (startDate.length == 0){
+			startDate = '';
+		} else {
+			startDate = startDate[0].val;
+		}
+		if (endDate.length == 0){
+			endDate = '';
+		} else {
+			endDate = endDate[0].val;
+		}
+		
+		
+		timelineAdd(windowTitle, startDate, endDate);
+
 	});
 };
 

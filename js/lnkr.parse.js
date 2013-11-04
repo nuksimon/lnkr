@@ -340,7 +340,7 @@ function parseMetaData(article, windowId){
 		
 		if (reYY.test(year)){								//"yyyy-yyyy" range format
 			bday = year.replace(/-.*/g, "");
-			dday = year.replace(/.*-/g, "");
+			//dday = year.replace(/.*-/g, "");
 		}
 		else {												//"yyyy" format
 			bday = year;

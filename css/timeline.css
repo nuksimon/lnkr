@@ -1,6 +1,8 @@
 div.timeline-frame {
     border: 1px solid #BEBEBE;
     overflow: hidden;
+	font-family:helvetica, sans;
+	font-size:0.9em;
 }
 
 div.timeline-axis {
@@ -20,7 +22,7 @@ div.timeline-axis-grid-major {
 }
 div.timeline-axis-text {
     color: #4D4D4D;
-    padding: 3px;
+    /*padding: 3px;*/
     white-space: nowrap;
 }
 
@@ -90,7 +92,7 @@ div.timeline-event-line {
 }
 
 div.timeline-event-content {
-    margin: 5px;
+    margin: 0px;
     white-space: nowrap;
     overflow: hidden;
 }

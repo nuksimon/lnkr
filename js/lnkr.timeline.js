@@ -20,11 +20,13 @@ function drawVisualization() {
 	data.addColumn('datetime', 'end');
 	data.addColumn('string', 'content');
 
+	/*
 	data.addRows([
 		[new Date(1939,8,1), , 'German Invasion of Poland'],
 		[new Date(1940,4,10), , 'Battle of France and the Low Countries'],
 		[new Date(1940,7,13), , 'Battle of Britain - RAF vs. Luftwaffe'],
 	]);
+	*/
 
 	// specify options
 	options = {
@@ -45,18 +47,38 @@ function drawVisualization() {
 };
 
 
-
-function timelineAdd(content, strStart) {
+//add an event to the timeline
+function timelineAdd(content, strStart, strEnd) {
+	//alert(strStart + "_" + strEnd);
 	var range = timeline.getVisibleChartRange();
 	var start = new Date(strStart);
+	var end = new Date(strEnd);
+	var flagDate = true;
 
-	timeline.addItem({
-		'start': start,
-		'content': content
-	});
+	if (strStart != '' && strEnd != ''){	//both start and end dates
+		timeline.addItem({
+			'start': start,
+			'end': end,
+			'content': content
+		});
+	} else if (strStart != ''){			//only start
+		timeline.addItem({
+			'start': start,
+			'content': content
+		});
+	} else if (strEnd != ''){				//only end
+		timeline.addItem({
+			'start': end,
+			'content': content
+		});
+	} else {							//no date
+		flagDate = false;
+	}
 
-	var count = data.getNumberOfRows();
-	timeline.setSelection([{
-		'row': count-1
-	}]);
+	if (flagDate == true) {
+		var count = data.getNumberOfRows();
+		timeline.setSelection([{
+			'row': count-1
+		}]);
+	}
 }
