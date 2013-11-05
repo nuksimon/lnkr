@@ -397,6 +397,11 @@ function hoverWindowStart(el)
 	
 	//display the buttons
 	$(el).find('.cButton').css('display', 'inline');
+	
+	//turn on timeline hover colours
+	var windowTitle = $(el).find('h1:first').text();
+	var timelineElement = getTimelineElementContainer(windowTitle);
+	$(timelineElement).addClass('timeline-hover');
 };
 
 function hoverWindowStop(el)
@@ -406,9 +411,21 @@ function hoverWindowStop(el)
 	
 	//hide the buttons
 	$(el).find('.cButton').css('display', 'none');
+	
+	//turn off timeline hover colours
+	var windowTitle = $(el).find('h1:first').text();
+	var timelineElement = getTimelineElementContainer(windowTitle);
+	$(timelineElement).removeClass('timeline-hover');
 };
 
-
+//return the timeline element container
+function getTimelineElementContainer(windowTitle){
+	var timelineElement = $('.timeline-event').find('div:contains('+windowTitle+'):first');
+	if (timelineElement.text() == ''){
+		timelineElement = $('.timeline-event-dot-container').find('div:contains('+windowTitle+'):first').parent();
+	}
+	return timelineElement;
+};
 
 
 

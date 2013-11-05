@@ -39,11 +39,17 @@ div.timeline-event {
     background-color: #D5DDF6;
     display: inline-block;
 }
+div.timeline-hover {
+    background-color: #ec9f2e;
+}
+div.timeline-event-dot-container {
+	border-radius: 3px;
+}
 
 div.timeline-event-selected {
-    border-color: #FFC200;
+   /* border-color: #FFC200;
     background-color: #FFF785;
-    z-index: 999;
+    z-index: 999;*/
 }
 
 div.timeline-event-cluster {

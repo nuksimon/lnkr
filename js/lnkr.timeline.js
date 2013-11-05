@@ -109,5 +109,7 @@ function getTimelineIndex(windowTitle){
 //delete the element with windowTitle from the timeline
 function deleteTimelineIndex(windowTitle){
 	var index = getTimelineIndex(windowTitle);
-	timeline.deleteItem(index);
+	if (index != null){
+		timeline.deleteItem(index);
+	}
 }
