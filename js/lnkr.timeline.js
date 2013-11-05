@@ -33,7 +33,7 @@ function drawVisualization() {
 		'width':  '100%',
 		'height': 'auto',
 		'start': new Date(1400, 6, 1),
-		'end': new Date(1946, 6, 1),
+		'end': new Date(2050, 6, 1),
 		'editable': false,
 		'animate': false,
 		'style': 'dot'
@@ -98,4 +98,16 @@ function toggleTimeline() {
 		$('#mytimeline').css('display', 'none');
 	}
 
+}
+
+//get the index (row number) of a timeline item for a given windowTitle
+function getTimelineIndex(windowTitle){
+	var index = data.getFilteredRows([{column: 2, value: windowTitle}]);		//column 2 = 'content' (windowTitle)
+	return index[0];
+};
+
+//delete the element with windowTitle from the timeline
+function deleteTimelineIndex(windowTitle){
+	var index = getTimelineIndex(windowTitle);
+	timeline.deleteItem(index);
 }

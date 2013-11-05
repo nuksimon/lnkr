@@ -287,7 +287,9 @@ function isWindowOverlap(top,left)
 //------------------------- Buttons ----------------------------------------------------
 
 function closeWindow(el)
-{	//close the active window
+{	//close the active window and remove from timeline
+	deleteTimelineIndex($(el).find('h1:first').text());	//pass the windowTitle
+	
 	jsPlumb.detachAllConnections(el.attr('id'));
 	el.remove();
 }
