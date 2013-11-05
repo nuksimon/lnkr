@@ -126,8 +126,11 @@ html, body {
 	margin: 0px;
 	background-color:SteelBlue;
 	color:white;
-	border-radius:2px;
+	border-radius:5px;
 	padding-left:5px;
+	border-style:solid;
+	border-width:1px;
+	border-color:white;
 }
 .window p{
 	text-align:left;
@@ -197,7 +200,7 @@ html, body {
 .buttonWindow{
 	max-width:15px;
 	max-height:15px;
-	margin-left:5px;
+	margin-left:3px;
 	border-radius:0px;
 }
 
