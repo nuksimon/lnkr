@@ -14,6 +14,28 @@ function runTestDates(){
 	
 	arrTestData.push({tag1: 'Born', val1: '1955', tag2: 'Died', val2: '1999'});
 	arrTestData.push({tag1: 'Born', val1: 'June 1955', tag2: 'Died', val2: 'September 1999'});
+	arrTestData.push({tag1: 'Born', val1: 'April 15, 2011', tag2: 'Died', val2: 'March 15, 2011'});
+	arrTestData.push({tag1: 'Born', val1: 'before 31 October 1451', tag2: 'Died', val2: 'September 1999'});
+	arrTestData.push({tag1: 'Born', val1: '31 October 1451', tag2: 'Died', val2: 'September 1999'});
+	arrTestData.push({tag1: 'Born', val1: 'c. 1500', tag2: 'Died', val2: 'c 500'});
+	arrTestData.push({tag1: 'Born', val1: 'ca. 1455', tag2: 'Died', val2: 'ca 1455'});
+	
+	arrTestData.push({tag1: 'Born', val1: '20 May 1506 (aged c. 54)', tag2: 'Died', val2: '20 May 1506 City'});
+	arrTestData.push({tag1: 'Born', val1: '20 May 1506, City', tag2: 'Died', val2: '1254 city'});
+	arrTestData.push({tag1: 'Born', val1: '20-21 May 1506 City', tag2: 'Died', val2: '20 or 21 May 1506 City'});
+	arrTestData.push({tag1: 'Born', val1: '3 June 55', tag2: 'Died', val2: '4 May 9'});
+	arrTestData.push({tag1: 'Born', val1: '1955 BC', tag2: 'Died', val2: '1999 BCE'});
+	arrTestData.push({tag1: 'Born', val1: '1955 AD', tag2: 'Died', val2: '1999 CE'});
+	arrTestData.push({tag1: 'Born', val1: 'likely 1955', tag2: 'Died', val2: '1999'});
+	
+	arrTestData.push({tag1: 'Years', val1: '1955-1956', tag2: '', val2: ''});
+	arrTestData.push({tag1: 'Years', val1: '1955-56', tag2: '', val2: ''});
+	arrTestData.push({tag1: 'Years', val1: '1955-6', tag2: '', val2: ''});
+	arrTestData.push({tag1: 'Years', val1: '1955-present', tag2: '', val2: ''});
+	
+	arrTestData.push({tag1: 'Born', val1: '1955', tag2: 'Died', val2: '1401 or 1397'});
+	arrTestData.push({tag1: 'Born', val1: '1955', tag2: 'Died', val2: '1401 or 1397 BC'});
+	arrTestData.push({tag1: 'Born', val1: '1955', tag2: 'Died', val2: '1999'});
 	
 	var testMetaData;
 	
@@ -354,7 +376,7 @@ function parseMetaData(article, windowId){
 	var metadata = [];	//array of tag-value pairs
 	var objMetadata;	//{tag, val}
 	var tagVal;
-	var flagTEST = true;	//run in test mode
+	var flagTEST = false;	//run in test mode
 	//alert('Article:  ' + article);
 	
 	if (flagTEST == true){
@@ -401,12 +423,22 @@ function parseMetaData(article, windowId){
 		var rePresent = new RegExp(/-present/i);
 		
 		if (reYY.test(year)){								//"yyyy-yyyy" range format
-			bday = year.replace(/-.*/g, "");
-			dday = year.replace(/.*-/g, "");
+			//alert('y: "' + year + '"');
+			bday = ''+reNum.exec(year.replace(/-.*/g, ""));
+			dday = ''+reNum.exec(year.replace(/.*-/g, ""));
 			var lengthDif = bday.length - dday.length;
-			if (lengthDif > 0){
-				var strYearPrepend = "\d{2}";
-				var reYearPrepend = new RegExp(strYearPrepend,"i");
+			if (lengthDif > 0){									// end year has less digits ("1970-82")
+				var reYearPrepend;
+				if (lengthDif == 1){							//HACK - could not get variables into a RegExp for some reason...
+					reYearPrepend = new RegExp(/\d{1}/);
+				} else if (lengthDif == 2){
+					reYearPrepend = new RegExp(/\d{2}/);
+				} else if (lengthDif == 3){
+					reYearPrepend = new RegExp(/\d{3}/);
+				} else {
+					reYearPrepend = new RegExp(/\d{4}/);
+				}
+				
 				dday = reYearPrepend.exec(bday) + dday;
 				//alert(lengthDif);
 			}
@@ -472,6 +504,24 @@ function findTag(tagName, arrSearch, metadata, data, windowId){
 	return metadata;
 };
 
+//perform text search on an array of key words.  return the matching value result
+function findDate(arrSearch){
+/*	
+	arrSearch 	= array of keywords to search for
+*/
+
+	var tagVal;
+	for (i = 0, l = arrSearch.length; i < l; i++) {
+		tagVal = data.find("th:containsCi("+arrSearch[i]+"):first").next().html();	//look for the search term	
+
+		if (tagVal != '' && tagVal != null){						//tag found; exit loop (skip the rest of the search terms)
+			tagVal = internalLinks(tagVal, windowId);
+			break;
+		}
+	}
+	return tagVal;
+};
+
 
 //turn hyperlinks into internal links
 function internalLinks(el, windowId)
@@ -530,6 +580,8 @@ function convertTextDateToNumber(checkDate){
 		if (reTextMonth.test(checkDate) == false){				//no month found (alpha was the "or")
 			reDay = '';
 			reTextMonth = '';
+			reYear = new RegExp(/\d+/);							//yyyy only
+			//alert('1b: "'+checkDate+'"');
 		}
 		matchDateFormat = true;
 		//alert('1: "'+checkDate+'"');
@@ -553,7 +605,7 @@ function convertTextDateToNumber(checkDate){
 	
 	//perform the date parse
 	if (matchDateFormat == true){
-		var tempDate = reNum.exec(reYear.exec(checkDate));
+		var tempDate = ''+reNum.exec(reYear.exec(checkDate));
 		
 		if (reTextMonth != ''){
 			var monthNumber = convertMonthNameToNumber(reTextMonth.exec(checkDate));	//turns the text month to a number
@@ -581,7 +633,10 @@ function zeroPadYear(checkDate)
 	
 	if (checkYear < 1000){
 		if (checkYear < 100){
-			checkYear = '0' + checkYear;
+			if (checkYear < 10){
+				checkYear = '0' + checkYear;
+			}
+			checkYear = '0' + checkYear;	
 		}
 		checkYear = '0' + checkYear;
 		var remainderDate = checkDate.replace(/\d+/, "");
@@ -617,8 +672,9 @@ function removeEpoch(checkDate){
 //cleanup the date string
 function cleanDate(checkDate){
 	checkDate = ''+checkDate;								//ensure we have a string (not an integer)
-	checkDate = checkDate.replace(/c(\.|a|a\.)\s/g, "");	//removes the "c(a.) " at the start of some dates	
+	checkDate = checkDate.replace(/c(|\.|a|a\.)\s/g, "");	//removes the "c(a.) " at the start of some dates	
 	checkDate = checkDate.replace(/before /g, "");			//removes the "before" at the start of some dates
+	checkDate = checkDate.replace(/likely /g, "");			//removes the "likely" at the start of some dates
 	checkDate = checkDate.replace(/Exhibited in /g, "");			//removes the "text" at the start of some dates
 	checkDate = checkDate.replace(/ \(.*/g, "");			//removes everything after the space+bracket (" (")
 	
