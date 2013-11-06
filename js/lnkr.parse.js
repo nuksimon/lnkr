@@ -7,6 +7,52 @@
 
 // ----------------- TEST functions not used in main code ----------------------------------------------
 
+//TEST function: MetaData Dates
+function runTestDates(){
+	var arrTestData = [];
+	var arrInfobox = [];
+	
+	arrTestData.push({tag1: 'Born', val1: '1955', tag2: 'Died', val2: '1999'});
+	arrTestData.push({tag1: 'Born', val1: 'June 1955', tag2: 'Died', val2: 'September 1999'});
+	
+	var testMetaData;
+	
+	var i, l;
+	for (i = 0, l = arrTestData.length; i < l; i++) {
+		//$('#htmlDump').append(buildInfobox(arrTestData[i]));
+		testMetaData = parseMetaData(buildInfobox(arrTestData[i]),"dummyId");
+		$('#statsTable').append(buildMetaDataTestResult(testMetaData, arrTestData[i]));
+	}
+	
+};
+
+function buildMetaDataTestResult(testMetaData, testData){
+	var startDate = $.grep(testMetaData, function(e){ return e.tag == 'Start'; });
+	var endDate = $.grep(testMetaData, function(e){ return e.tag == 'End'; });
+		
+	var formatedData = '<tr><td>' + testData.tag1 + '</th><td>' + testData.val1 + '</td>';
+	formatedData += '<td>' + testData.tag2 + '</th><td>' + testData.val2 + '</td>';
+	formatedData += '<td>' + startDate[0].val + '</th><td>' + endDate[0].val + '</td></tr>';
+	return formatedData;
+}
+
+function buildInfobox(testData){
+	
+	var infobox = '<div class="infobox"><table>';
+	infobox += '<tr><th>' + testData.tag1 + '</th><td>' + testData.val1 + '</td></tr>';
+	infobox += '<tr><th>' + testData.tag2 + '</th><td>' + testData.val2 + '</td></tr>';
+	infobox += '</table></div>';
+	return infobox;
+};
+
+function buildJSON(strHTML){
+	var strJSON = '{"parse":{"text":{"*":"' + 'aa' + '"}}}';
+	return JSON.stringify(eval("(" + strJSON + ")"))
+	//return strJSON;
+};
+
+
+
 //TEST function: main
 function runSearch()
 {
@@ -308,9 +354,18 @@ function parseMetaData(article, windowId){
 	var metadata = [];	//array of tag-value pairs
 	var objMetadata;	//{tag, val}
 	var tagVal;
+	var flagTEST = true;	//run in test mode
+	//alert('Article:  ' + article);
 	
-	wikipage = $('<div>'+article.parse.text['*']+'</div>');
+	if (flagTEST == true){
+		wikipage = $('<div>'+article+'</div>');
+	} else {
+		wikipage = $('<div>'+article.parse.text['*']+'</div>');
+	}
+	//alert("2");
 	var infobox = wikipage.find('.infobox:first');
+	
+	//alert("3");
 	
 	//find start (birthday)
 	var bday = infobox.find('.bday:first').text();							//find the first bday class
@@ -329,7 +384,7 @@ function parseMetaData(article, windowId){
 	if (bday == ''){
 		bday = infobox.find("th:containsCi('Signed'):first").next().text();		
 	}
-	
+	//alert(bday);
 	
 	//find end (death day)
 	var dday = infobox.find('.dday:first').text();							//find the first dday class
@@ -343,13 +398,24 @@ function parseMetaData(article, windowId){
 		year = year.replace(/\u2013|\u2014/g, "-");			//change "en" and "em" dashes to hyphens "-"
 		var reYY = new RegExp(/\d+-\d+/);
 		var reNum = new RegExp(/\d+/);
+		var rePresent = new RegExp(/-present/i);
 		
 		if (reYY.test(year)){								//"yyyy-yyyy" range format
 			bday = year.replace(/-.*/g, "");
-			//dday = year.replace(/.*-/g, "");
+			dday = year.replace(/.*-/g, "");
+			var lengthDif = bday.length - dday.length;
+			if (lengthDif > 0){
+				var strYearPrepend = "\d{2}";
+				var reYearPrepend = new RegExp(strYearPrepend,"i");
+				dday = reYearPrepend.exec(bday) + dday;
+				//alert(lengthDif);
+			}
 		}
-		else {												//"yyyy" format
-			bday = year;
+		else {												//"yyyy" or "yyyy-present" format
+			bday = '' + reNum.exec(year);
+			if (rePresent.test(year)){
+				dday = 'present';
+			}
 		}
 	}
 	
@@ -360,7 +426,9 @@ function parseMetaData(article, windowId){
 		metadata.push(objMetadata);
 	}
 	if (dday != '' && dday != null){
-		dday = cleanDate(dday);	
+		if (dday != 'present') {
+			dday = cleanDate(dday);	
+		}
 		objMetadata = {tag: 'End', val: dday};
 		metadata.push(objMetadata);
 	}
@@ -548,17 +616,17 @@ function removeEpoch(checkDate){
 
 //cleanup the date string
 function cleanDate(checkDate){
-	
+	checkDate = ''+checkDate;								//ensure we have a string (not an integer)
 	checkDate = checkDate.replace(/c(\.|a|a\.)\s/g, "");	//removes the "c(a.) " at the start of some dates	
 	checkDate = checkDate.replace(/before /g, "");			//removes the "before" at the start of some dates
 	checkDate = checkDate.replace(/Exhibited in /g, "");			//removes the "text" at the start of some dates
 	checkDate = checkDate.replace(/ \(.*/g, "");			//removes everything after the space+bracket (" (")
-
+	
 	var epoch = findEpoch(checkDate);						//0=no epoch found, 1=CE, -1=BCE
 	if (epoch != 0){
 		checkDate = removeEpoch(checkDate);
 	}
-
+	
 	checkDate = convertTextDateToNumber(checkDate);			//check for "text" dates, i.e. '20 January 1998'
 	checkDate = checkDate.replace(/\s.*/g, "");				//removes everything after the space (" ")
 	checkDate = checkDate.replace(/,.*/g, "");				//removes everything after the comma (",")

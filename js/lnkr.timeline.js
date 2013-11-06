@@ -56,6 +56,10 @@ function timelineAdd(content, strStart, strEnd) {
 	var flagDate = true;
 	
 	//alert('"' + start + '"_"' + end + '"');
+	if (strEnd == 'present'){
+		end = new Date();
+	}
+	
 
 	if (start != 'Invalid Date' && end != 'Invalid Date'){	//both start and end dates
 		timeline.addItem({

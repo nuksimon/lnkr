@@ -1,0 +1,12 @@
+td{
+    width: 100px;
+    max-width: 300px;
+}
+
+table {
+   table-layout: fixed;
+}
+
+.val{
+	width: 200px;
+}
