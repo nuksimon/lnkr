@@ -425,12 +425,20 @@ function hoverWindowStop(el)
 
 //return the timeline element container
 function getTimelineElementContainer(windowTitle){
-	var timelineElement = $('.timeline-event').find('div:contains('+windowTitle+'):first');
+	var timelineElement = $('.timeline-event').find('div:matchCi('+windowTitle+'):first');
 	if (timelineElement.text() == ''){
-		timelineElement = $('.timeline-event-dot-container').find('div:contains('+windowTitle+'):first').parent();
+		timelineElement = $('.timeline-event-dot-container').find('div:matchCi('+windowTitle+'):first').parent();
 	}
 	return timelineElement;
 };
+
+//custom jquery selector:  exact match (case insensitive) 
+$.expr[":"].matchCi = $.expr.createPseudo(function(arg) {
+    return function( elem ) {
+        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) == 0;
+    };
+});
+
 
 
 
