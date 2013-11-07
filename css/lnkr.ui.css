@@ -4,6 +4,7 @@ html, body {
 	margin: 0;
 	opacity:1; 
 	overflow:hidden;
+	font-family:helvetica, sans;
 }
 
 #browserAlert{
@@ -33,6 +34,14 @@ html, body {
 	display: table-row;
 	background-color: white;
 	opacity:0.5;
+}
+.headerRight{
+	float: right;
+	padding-right:1em; 
+	vertical-align:middle;
+	font-weight:bold;
+	color:SteelBlue;
+	cursor:pointer;
 }
 
 
@@ -253,4 +262,14 @@ table {
 #window5 { left:65em;top:1em;}
 #window6 { left:70em;top:26em;}
 
+
+/* ---- About Window Classes -------------- */
+
+.windowAbout{
+	left:5em;
+	top:5em;
+	display:none;
+	z-index:3000;
+	opacity:1;
+}
 

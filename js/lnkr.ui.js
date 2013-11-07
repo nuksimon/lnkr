@@ -257,7 +257,7 @@ function findWindowPosition(sourceWindowId)
 		}
 	}
 	return windowPos;
-}
+};
 
 //check all windows to see if they overlap with the coordinates
 function isWindowOverlap(top,left)
@@ -280,7 +280,7 @@ function isWindowOverlap(top,left)
 	});
 	
 	return overlap;
-}
+};
 
 
 
@@ -292,13 +292,23 @@ function closeWindow(el)
 	
 	jsPlumb.detachAllConnections(el.attr('id'));
 	el.remove();
-}
+};
 
 
 function closeBrowserAlert(){
 	//alert('click');
 	$('#browserAlert').remove();
-}
+};
+
+//hide the given window (only used for About window)
+function hideWindow(elId){
+	$(elId).css('display', 'none');
+};
+
+function showWindow(elId){
+	$(elId).css('display', 'inline');
+	//alert();
+};
 
 
 //---------------- Display UI control ------------------------------------------------
