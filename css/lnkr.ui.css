@@ -6,6 +6,16 @@ html, body {
 	overflow:hidden;
 }
 
+#browserAlert{
+	background-color: yellow;
+	opacity:1;
+	height: 100%;
+    width: 100%;
+	font-family:helvetica, sans;
+	padding: 3px;
+	padding-left: 20px;
+}
+
 #windowContainer{
 	/*background-color:blue;
 	position:absolute;

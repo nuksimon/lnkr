@@ -295,6 +295,11 @@ function closeWindow(el)
 }
 
 
+function closeBrowserAlert(){
+	//alert('click');
+	$('#browserAlert').remove();
+}
+
 
 //---------------- Display UI control ------------------------------------------------
 
