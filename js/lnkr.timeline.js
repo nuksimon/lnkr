@@ -36,7 +36,10 @@ function drawVisualization() {
 		'end': new Date(2050, 6, 1),
 		'editable': false,
 		'animate': false,
-		'style': 'dot'
+		'style': 'dot',
+		'eventMargin': 4,
+		'eventMarginAxis': 4,
+		'showMajorLabels': false
 	};
 
 	// Instantiate our timeline object.
