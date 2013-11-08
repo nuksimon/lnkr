@@ -413,6 +413,9 @@ function hoverWindowStart(el)
 	//display the buttons
 	$(el).find('.cButton').css('display', 'inline');
 	
+	//display the details
+	$(el).find('.display3').css('display', 'inline');
+	
 	//turn on timeline hover colours
 	var windowTitle = $(el).find('h1:first').text();
 	var timelineElement = getTimelineElementContainer(windowTitle);
@@ -426,6 +429,9 @@ function hoverWindowStop(el)
 	
 	//hide the buttons
 	$(el).find('.cButton').css('display', 'none');
+	
+	//hide the details
+	$(el).find('.display3').css('display', 'none');
 	
 	//turn off timeline hover colours
 	var windowTitle = $(el).find('h1:first').text();

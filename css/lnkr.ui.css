@@ -250,6 +250,10 @@ html, body {
 	/*display:block;*/
 }
 
+.display3{
+	display:none;
+}
+
 img{
 	border-radius:4px;
 
