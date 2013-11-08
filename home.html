@@ -11,11 +11,11 @@
 			<div id="header">
 				
 				<!-- Search -->
-				<form id="searchForm">
-					<input type="text" name="search" id="searchFormText" value="Leonardo da Vinci" onkeypress="return notEnterKey(event)">
-					<input type="button" id="searchFormButton" onclick="createWindowFromSearch()" value="Search">
+				<form id="searchForm" class="searchform">
+					<input class="searchfield" type="text" name="search" id="searchFormText" value="Leonardo da Vinci" onkeypress="return notEnterKey(event)">
+					<input class="searchbutton buttonHeader" type="button" id="searchFormButton" onclick="createWindowFromSearch()" value="Go">
 				</form>
-				<select  id="dropSource" onchange="updateAutocomplete()" class="dropDown"></select>
+				<select  id="dropSource" onchange="updateAutocomplete()" class="dropDown searchfield"></select>
 				
 				<!-- Timeline buttons -->
 				<span class="spacer"></span>
@@ -35,8 +35,8 @@
 				
 				
 				<img class="buttonView buttonHeader headerRight" onclick="showWindow('#windowAbout')" src="img/about.png" title="About" />
-				<span class="spacer headerRight"></span>
-					
+				
+		
 				
 				
 			</div>
@@ -55,17 +55,17 @@
 				
 				<h1 class="display1"> LnkLnkr </h1>
 				<h2>About:</h2>
-				<div class="scrollBarY">
+				<div class="scrollBarYAbout">
 					<p> LnkLnkr is an interactive browser-based mind map for wikipedia.</p>
-					<p> Enter a new paradigm of learning where you are in control of how information is arranged.</p>
-					<p> </p>
-					<p> Learn how different articles relate to each other with a high level contextual view. </p>
-					<p> Links will be drawn between related articles to visually show their connection. </p>
-					<p> LnkLnkr provides a workspace that allows you to drag and arrange information in a way that is helpful to you. </p>
-					
+					<br>
+					<p> Enter a new paradigm of learning where you are in control of how information is arranged.  
+					Learn how different articles relate to each other with a high level contextual view.  
+					Links will be drawn between related articles to visually show their connection.  
+					LnkLnkr provides a workspace that allows you to drag and arrange information in a way that is helpful to you. </p>
+					<br>
 				</div>
 				<h2>Contact:</h2>
-				<div class="scrollBarY">
+				<div class="scrollBarYAbout">
 					<p> Email: ... </p>
 					<p> </p>
 					<p> LnkLnkr is open source!  Checkout our project on <a href="https://github.com/nuksimon/lnkr" target="_blank">GitHub</a>. </p>

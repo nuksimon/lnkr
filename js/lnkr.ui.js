@@ -628,7 +628,7 @@ function formatWindow(dataSource, windowTitle, windowId)
 	windowBody += '<img onclick="display1($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_title.png" />';
 	windowBody += '<img onclick="display4($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_icon.png" />';
 	windowBody += '<img onclick="display2($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_icon_title.png" />';
-	windowBody += '<img onclick="display3($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_detail.png" />';
+	//windowBody += '<img onclick="display3($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_detail.png" />';
 	windowBody += '<img class="cButtonClose" onclick="closeWindow($(this).parents(&quot;.window&quot;));" src="img/Button_Icon_Red.svg.png" />';
 	windowBody += '</div>';
 	
