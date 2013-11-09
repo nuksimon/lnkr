@@ -7,6 +7,9 @@
 var zoom_level = 1;
 var zoom_level_min = 1;
 var zoom_level_max = 4;
+var zoomScale = [1,0.75,0.55,0.4];
+
+
 //window.addEventListener("mousewheel",function(){
 document.getElementById('background').addEventListener("mousewheel",function(){
 	
@@ -181,7 +184,7 @@ function arrangeWindowGrid(){
 	var pxTop = 450;
 	var gridWidth = 3;		//# of windows across
 	var i = 0;
-	var zoomScale = [1,0.75,0.55,0.4]
+	//var zoomScale = [1,0.75,0.55,0.4];
 	
 	$('.window').each(function()
 	{
@@ -225,7 +228,7 @@ function arrangeWindowChrono(){
 	var pxTopStart = 80;
 	var pxLeft = 350;		//incremental offset
 	var pxTop = 0;
-	var zoomScale = [1,0.75,0.55,0.4]
+	//var zoomScale = [1,0.75,0.55,0.4];
 	
 	for (i = 0, l = arrWindow.length; i < l; i++) {
 		var posTop = (pxTopStart + (i * pxTop)) * zoomScale[zoom_level-1];

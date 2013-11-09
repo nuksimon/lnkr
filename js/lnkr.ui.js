@@ -1,5 +1,6 @@
 var newWindowCount = 1000;	//starting window counter
 var maxLinks = 10;			//max number of links to include in the link table
+var displayDetails = true;	//global toggle for the Details view
 
 jsPlumb.bind("ready", function() {
 
@@ -234,11 +235,11 @@ function findWindowPosition(sourceWindowId)
 	//default value from search
 	var windowPos = {
 			left: 20,
-			top: 80
+			top: 50
 		};
 	
-	var pxLeft = 300;
-	var pxTop = 450;
+	var pxLeft = 300 * zoomScale[zoom_level-1];
+	var pxTop = 450 * zoomScale[zoom_level-1];
 	var spaceLeft = new Array(pxLeft, pxLeft, 0, -1*pxLeft, -1*pxLeft, -1*pxLeft, 0, pxLeft);
 	var spaceTop = new Array(0, pxTop, pxTop, pxTop, 0, -1*pxTop, -1*pxTop, -1*pxTop);
 	
@@ -256,6 +257,16 @@ function findWindowPosition(sourceWindowId)
 			windowPos.top = Math.max(pos.top + spaceTop[i],0);
 			i++;
 		}
+	} else {
+		//new window from search
+		//check if the spot is filled, try the next spot if it is (horizontally)
+		var i = 1
+		while (isWindowOverlap(windowPos.top,windowPos.left) == true && i < 8){
+			windowPos.left = windowPos.left + pxLeft;
+			i++;
+		}
+	
+	
 	}
 	return windowPos;
 };
@@ -264,8 +275,8 @@ function findWindowPosition(sourceWindowId)
 function isWindowOverlap(top,left)
 {
 	//area to check for existing windows
-	var sizeLeft = 290;
-	var sizeTop = 380;
+	var sizeLeft = 290 * zoomScale[zoom_level-1];
+	var sizeTop = 380 * zoomScale[zoom_level-1];
 	
 	var overlap = false
 	
@@ -366,6 +377,8 @@ function display3_all()
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'inline');
 	jsPlumb.repaintEverything();
+	
+
 };
 function display4_all()
 {	//image only (display2)
@@ -374,6 +387,17 @@ function display4_all()
 	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
 };
+function toggleDisplayDetails(){
+	//toggle the global setting to display the Details view
+	if (displayDetails == true){
+		displayDetails = false;
+		$('#detailIcon').attr('src', 'img/view_detail_off.png');
+	} else {
+		displayDetails = true;
+		$('#detailIcon').attr('src', 'img/view_detail.png');
+	}
+};
+
 
 
 //--- Toggle the info sections
@@ -414,8 +438,10 @@ function hoverWindowStart(el)
 	//display the buttons
 	$(el).find('.cButton').css('display', 'inline');
 	
-	//display the details
-	$(el).find('.display3').css('display', 'inline');
+	//display the details (if allowed)
+	if (displayDetails == true){
+		$(el).find('.display3').css('display', 'inline');
+	}
 	
 	//turn on timeline hover colours
 	var windowTitle = $(el).find('h1:first').text();
