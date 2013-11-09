@@ -454,12 +454,12 @@ function parseMetaData(article, windowId){
 	}
 	
 
-	if (bday != '' && bday != null){
+	if (bday != '' && bday != null && bday.indexOf('null') == -1){
 		bday = cleanDate(bday);	
 		objMetadata = {tag: 'Start', val: bday};
 		metadata.push(objMetadata);
 	}
-	if (dday != '' && dday != null){
+	if (dday != '' && dday != null && dday.indexOf('null') == -1){
 		if (dday != 'present') {
 			dday = cleanDate(dday);	
 		}

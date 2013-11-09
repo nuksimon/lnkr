@@ -68,7 +68,7 @@ html, body {
 }
 
 
-.window { 
+.windowStyle { 
 	opacity:0.8; 
 	filter:alpha(opacity=80); 
 	z-index:20; 
@@ -132,13 +132,13 @@ html, body {
 	cursor:pointer;
 	
 }
-.window h1{
+.windowStyle h1{
 	color:SteelBlue;
 	margin: 0px;
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
-.window h2{
+.windowStyle h2{
 	text-align:left;
 	font-size:0.9em;
 	margin: 0px;
@@ -150,7 +150,7 @@ html, body {
 	border-width:1px;
 	border-color:white;
 }
-.window p{
+.windowStyle p{
 	text-align:left;
 	margin: 2px;
 	font-size:0.9em;
@@ -232,10 +232,11 @@ a{
 
 .buttonHeader{
 	cursor:pointer;
-	max-width:25px;
-	max-height:25px;
+	max-width:23px;
+	max-height:23px;
 	margin-left:5px;
 	border-radius:0px;
+	padding-top:2px;
 }
 
 .spacer{
@@ -290,6 +291,11 @@ table {
 /* search form 
 http://www.awcore.com/url/aHR0cDovL3d3dy53ZWJkZXNpZ25lcndhbGwuY29tL3R1dG9yaWFscy9iZWF1dGlmdWwtY3NzMy1zZWFyY2gtZm9ybS8=
 -------------------------------------- */
+.searchform {
+	padding: 0px;
+	padding-top: 2px;
+}
+
 .searchfield {
 	background: #fff;
 	padding: 2px;
@@ -311,8 +317,10 @@ http://www.awcore.com/url/aHR0cDovL3d3dy53ZWJkZXNpZ25lcndhbGwuY29tL3R1dG9yaWFscy
 .searchbutton {
 	color: #fff;
 	border: solid 1px #494949;
-	font-size: 11px;
+	font-size: 10px;
 	margin-left: 0px;
+	margin-right: 4px;
+	padding: 4px;
 	text-shadow: 0 1px 1px rgba(0,0,0,.6);
 
 	-webkit-border-radius: 2em;
@@ -331,4 +339,7 @@ http://www.awcore.com/url/aHR0cDovL3d3dy53ZWJkZXNpZ25lcndhbGwuY29tL3R1dG9yaWFscy
 	min-width: 100px;
 	-webkit-appearance: none;
 	background: white;
+}
+.searchfieldText{
+	height: 18px;
 }

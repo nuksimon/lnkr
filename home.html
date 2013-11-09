@@ -7,12 +7,39 @@
 	</head>
 	<body data-demo-id="chartDemo" data-library="jquery">
 		
+		<!-- ------ About Window -------------------------------------------------------------------------------------------  -->
+		<div id="windowAbout" class="windowStyle windowAbout noZoom">	
+			<img class="cButtonClose" onclick="hideWindow('#windowAbout');" src="img/Button_Icon_Red.svg.png" />
+			
+			<h1 class="display1"> LnkLnkr </h1>
+			<h2>About:</h2>
+			<div class="scrollBarYAbout">
+				<p> LnkLnkr is an interactive browser-based mind map for wikipedia.</p>
+				<br>
+				<p> Enter a new paradigm of learning where you are in control of how information is arranged.  
+				Learn how different articles relate to each other with a high level contextual view.  
+				Links will be drawn between related articles to visually show their connection.  
+				LnkLnkr provides a workspace that allows you to drag and arrange information in a way that is helpful to you. </p>
+				<br>
+			</div>
+			<h2>Contact:</h2>
+			<div class="scrollBarYAbout">
+				<p> Email: <a href="mailto:info@lnklnkr.com?Subject=About" target="_top">info@lnklnkr.com</a></p>
+				<p> </p>
+				<p> LnkLnkr is open source!  Checkout our project on <a href="https://github.com/nuksimon/lnkr" target="_blank">GitHub</a>. </p>
+				<p> </p>
+				<p> Found a bug? LnkLnkr is still in its beta phase.  Help out our developers by reporting it here: <a href="mailto:info@lnklnkr.com?Subject=Bug" target="_top">dev@lnklnkr.com</a> </p>
+			</div>
+		</div>
+		
+		
+		<!-- ------ Page Content -------------------------------------------------------------------------------------------  -->
 		<div id="contentWrapper">
 			<div id="header">
 				
 				<!-- Search -->
 				<form id="searchForm" class="searchform">
-					<input class="searchfield" type="text" name="search" id="searchFormText" value="Leonardo da Vinci" onkeypress="return notEnterKey(event)">
+					<input class="searchfield searchfieldText" type="text" name="search" id="searchFormText" value="Leonardo da Vinci" onkeypress="return notEnterKey(event)">
 					<input class="searchbutton buttonHeader" type="button" id="searchFormButton" onclick="createWindowFromSearch()" value="Go">
 				</form>
 				<select  id="dropSource" onchange="updateAutocomplete()" class="dropDown searchfield"></select>
@@ -35,10 +62,6 @@
 				
 				
 				<img class="buttonView buttonHeader headerRight" onclick="showWindow('#windowAbout')" src="img/about.png" title="About" />
-				
-		
-				
-				
 			</div>
 			
 			<div id="background">
@@ -49,32 +72,7 @@
 			</div>
 			
 			
-			<div id="windowAbout" class="window windowAbout noZoom">
-				
-				<img class="cButtonClose" onclick="hideWindow('#windowAbout');" src="img/Button_Icon_Red.svg.png" />
-				
-				<h1 class="display1"> LnkLnkr </h1>
-				<h2>About:</h2>
-				<div class="scrollBarYAbout">
-					<p> LnkLnkr is an interactive browser-based mind map for wikipedia.</p>
-					<br>
-					<p> Enter a new paradigm of learning where you are in control of how information is arranged.  
-					Learn how different articles relate to each other with a high level contextual view.  
-					Links will be drawn between related articles to visually show their connection.  
-					LnkLnkr provides a workspace that allows you to drag and arrange information in a way that is helpful to you. </p>
-					<br>
-				</div>
-				<h2>Contact:</h2>
-				<div class="scrollBarYAbout">
-					<p> Email: ... </p>
-					<p> </p>
-					<p> LnkLnkr is open source!  Checkout our project on <a href="https://github.com/nuksimon/lnkr" target="_blank">GitHub</a>. </p>
-					<p> </p>
-					<p> Let us know what you think of LnkLnkr.  Provide your feedback here: ... </p>
-					<p> </p>
-					<p> Found a bug? LnkLnkr is still in its beta phase.  Help out our developers by reporting it here: ... </p>
-				</div>
-			</div>
+			
 			
 		</div>
 		

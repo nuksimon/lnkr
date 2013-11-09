@@ -48,6 +48,7 @@ jsPlumb.bind("ready", function() {
 			
 			//enable draggable on the entire class
 			jsPlumb.draggable(jsPlumb.getSelector(".window"), { cancel: '.scrollBarY' });
+			jsPlumb.draggable(jsPlumb.getSelector(".windowAbout"), { cancel: '.scrollBarYAbout' });
 			
 			
 			//$( ".window" ).resizable();
@@ -101,7 +102,7 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 	//setup the new window object for the DOM
 	var newWindowId = 'window' + newWindowCount;
 	var newWindow=document.createElement('div');	//movable window object
-	newWindow.className = 'window  window_zoom' + zoom_level;
+	newWindow.className = 'window windowStyle window_zoom' + zoom_level;
 	newWindow.id = newWindowId;
 	newWindow.onmouseover= function() {hoverWindowStart($(this));};
 	newWindow.onmouseout= function() {hoverWindowStop($(this));};
