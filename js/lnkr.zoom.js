@@ -193,7 +193,8 @@ function arrangeWindowGrid(){
 		$(this).offset({top: posTop , left: postLeft});
 		i++;
 	});
-
+	
+	ga('send', 'event', 'menu', 'arrange', 'grid');
 };
 
 
@@ -235,6 +236,8 @@ function arrangeWindowChrono(){
 		var postLeft = (pxLeftStart + (i * pxLeft)) * zoomScale[zoom_level-1];
 		$('#' + arrWindow[i].id).offset({top: posTop , left: postLeft});
 	}
+	
+	ga('send', 'event', 'menu', 'arrange', 'chrono');
 }
 
 //sort the "weight" field in the array of links

@@ -85,6 +85,7 @@ function createWindowFromSearch()
 	var windowTitle = document.getElementById('searchFormText').value;
 
 	//create the new window (sourceWindowId = 0 when from search)
+	ga('send', 'event', 'menu', 'search', windowTitle);
 	createWindow(dataSource, windowTitle, 0);
 }
 
@@ -223,7 +224,9 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		
 		timelineAdd(windowTitle, startDate, endDate);
-
+		
+		//Google Analytics event tracking
+		ga('send', 'event', 'window', 'create', windowTitle);
 	});
 };
 
@@ -300,6 +303,7 @@ function isWindowOverlap(top,left)
 
 function closeWindow(el)
 {	//close the active window and remove from timeline
+	ga('send', 'event', 'window', 'close', $(el).find('h1:first').text());
 	deleteTimelineIndex($(el).find('h1:first').text());	//pass the windowTitle
 	
 	jsPlumb.detachAllConnections(el.attr('id'));
@@ -319,6 +323,7 @@ function hideWindow(elId){
 
 function showWindow(elId){
 	$(elId).css('display', 'inline');
+	ga('send', 'event', 'menu', 'showWindow', elId);
 	//alert();
 };
 
@@ -363,6 +368,7 @@ function display1_all()
 	$(document).find('.display2').css('display', 'none');
 	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
+	ga('send', 'event', 'menu', 'display', 'title');
 };
 function display2_all()
 {	//Title (display1) & image (display2)
@@ -370,6 +376,7 @@ function display2_all()
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
+	ga('send', 'event', 'menu', 'display', 'title_image');
 };
 function display3_all()
 {	//all
@@ -377,8 +384,6 @@ function display3_all()
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'inline');
 	jsPlumb.repaintEverything();
-	
-
 };
 function display4_all()
 {	//image only (display2)
@@ -386,15 +391,18 @@ function display4_all()
 	$(document).find('.display2').css('display', 'inline');
 	$(document).find('.display3').css('display', 'none');
 	jsPlumb.repaintEverything();
+	ga('send', 'event', 'menu', 'display', 'image');
 };
 function toggleDisplayDetails(){
 	//toggle the global setting to display the Details view
 	if (displayDetails == true){
 		displayDetails = false;
 		$('#detailIcon').attr('src', 'img/view_detail_off.png');
+		ga('send', 'event', 'menu', 'displayDetails', 'off');
 	} else {
 		displayDetails = true;
 		$('#detailIcon').attr('src', 'img/view_detail.png');
+		ga('send', 'event', 'menu', 'displayDetails', 'on');
 	}
 };
 
@@ -405,24 +413,30 @@ function displaySummary(el)
 {	//toggle Summary
 	if(el.find('.cSummary').css('display') == 'none'){
 		el.find('.cSummary').css('display', 'block');
+		ga('send', 'event', 'window', 'summary', 'on');
 	} else {
 		el.find('.cSummary').css('display', 'none');
+		ga('send', 'event', 'window', 'summary', 'off');
 	}
 };
 function displayLinks(el)
 {	//toggle Links
 	if(el.find('.cLinks').css('display') == 'none'){
 		el.find('.cLinks').css('display', 'block');
+		ga('send', 'event', 'window', 'links', 'on');
 	} else {
 		el.find('.cLinks').css('display', 'none');
+		ga('send', 'event', 'window', 'links', 'off');
 	}
 };
 function displayMetaData(el)
 {	//toggle MetaData
 	if(el.find('.cMetaData').css('display') == 'none'){
 		el.find('.cMetaData').css('display', 'block');
+		ga('send', 'event', 'window', 'metaData', 'on');
 	} else {
 		el.find('.cMetaData').css('display', 'none');
+		ga('send', 'event', 'window', 'metaData', 'off');
 	}
 };
 
