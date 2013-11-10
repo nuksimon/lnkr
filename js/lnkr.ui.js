@@ -164,9 +164,10 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 	
 		
 		// parse first paragraph
-		wikipage = $('<div>'+data.parse.text['*']+'</div>').children('p:first');
+		var wikipage = $('<div>'+data.parse.text['*']+'</div>').children('p');
+		
 		if ($(wikipage).find('#coordinates').length > 0){								//p:first is used by the coords, take the next
-			wikipage = $('<div>'+data.parse.text['*']+'</div>').children('p:nth(1)');
+			wikipage.find('#coordinates').parent().remove();
 		}
 		wikipage.find('sup').remove();			//removes reference tags
 		wikipage.find('.error').remove();		//removes cite error message
@@ -178,12 +179,15 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		});
 	
 		//append to the Summary container
-		windowBody = '<p>' + $(wikipage).html() + '</p>';
+		windowBody = '';
+		$(wikipage).each(function() {
+			windowBody += '<p>' + $(this).html() + '</p><br>';
+		});
 		$('#'+newWindowId).find('.cSummary').append(windowBody);	
 		
 		//get the source url and append to the Summary
 		var titleURL = windowTitle.replace(/\s/g, "_");		//turn spaces into underscores for the url
-		windowBody = '<br><p>Source: <a href="' + dataSource + '/wiki/' + titleURL + '" target="_blank">' + dataSource + '</p><br>';
+		windowBody = '<p>Source: <a href="' + dataSource + '/wiki/' + titleURL + '" target="_blank">' + dataSource + '</p><br>';
 		$('#'+newWindowId).find('.cSummary').append(windowBody);
 		
 		
@@ -223,7 +227,7 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		}
 		
 		
-		timelineAdd(windowTitle, startDate, endDate);
+		timelineAdd(windowTitle, startDate, endDate);			//add to the timeline
 		
 		//Google Analytics event tracking
 		ga('send', 'event', 'window', 'create', windowTitle);
@@ -453,7 +457,7 @@ function hoverWindowStart(el)
 	$(el).find('.cButton').css('display', 'inline');
 	
 	//display the details (if allowed)
-	if (displayDetails == true){
+	if (displayDetails == true && zoom_level <= zoom_detail_max){
 		$(el).find('.display3').css('display', 'inline');
 	}
 	

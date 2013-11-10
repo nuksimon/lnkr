@@ -7,6 +7,7 @@
 var zoom_level = 1;
 var zoom_level_min = 1;
 var zoom_level_max = 4;
+var zoom_detail_max = 2;
 var zoomScale = [1,0.75,0.55,0.4];
 
 
