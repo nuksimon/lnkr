@@ -374,6 +374,7 @@ function SortByWeight(a, b){
 };
 
 
+// -------------------------------------------------------------------------------------------------------
 
 //Parse the infobox for MetaData
 function parseMetaData(article, windowId){
@@ -396,6 +397,9 @@ function parseMetaData(article, windowId){
 	
 	//find start (birthday)
 	var bday = infobox.find('.bday:first').text();							//find the first bday class
+	if (bday == ''){
+		bday = infobox.find('.dtstart:first').text();	
+	}
 	if (bday == ''){														//no class, perform text search
 		bday = ''+findDate(infobox, ['Born','Publication date','Published','Release','Created','Signed','Founded']);
 	}
@@ -403,6 +407,9 @@ function parseMetaData(article, windowId){
 	
 	//find end (death day)
 	var dday = infobox.find('.dday:first').text();							//find the first dday class
+	if (dday == ''){
+		dday = infobox.find('.dtend:first').text();	
+	}
 	if (dday == ''){														//no class, perform text search	
 		dday = ''+findDate(infobox, ['Died']);
 	}
