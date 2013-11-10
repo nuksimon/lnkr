@@ -457,8 +457,10 @@ function hoverWindowStop(el)
 	//hide the buttons
 	$(el).find('.cButton').css('display', 'none');
 	
-	//hide the details
-	$(el).find('.display3').css('display', 'none');
+	//hide the details for non-mobiles
+	if (is_mobile == false){
+		$(el).find('.display3').css('display', 'none');
+	}
 	
 	//turn off timeline hover colours
 	var windowTitle = $(el).find('h1:first').text();

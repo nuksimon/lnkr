@@ -133,12 +133,16 @@
 		
 		<!-- Browser check: display banner -->
 		<script type="text/javascript">
+			//browser check
 			var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 			if (is_chrome == false){
 				var browserAlert = '<div id="browserAlert" onclick="closeBrowserAlert()">We run all of our testing against Chrome.';
 				browserAlert += '  For best results we recommend <a href="https://www.google.com/intl/en/chrome/browser/" target="_blank">changing browsers</a>.  (click to dismiss)</div>';
 				$('#header').append(browserAlert);
 			}
+			
+			//mobile check
+			var is_mobile = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()));
 		</script>
 		
 		
