@@ -85,7 +85,7 @@ function createWindowFromSearch()
 	var windowTitle = document.getElementById('searchFormText').value;
 
 	//create the new window (sourceWindowId = 0 when from search)
-	ga('send', 'event', 'menu', 'search', windowTitle);
+	ga('send', 'event', 'search', 'search', windowTitle);
 	createWindow(dataSource, windowTitle, 0);
 }
 
@@ -183,7 +183,7 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		//get the source url and append to the Summary
 		var titleURL = windowTitle.replace(/\s/g, "_");		//turn spaces into underscores for the url
-		windowBody = '<br><p>Source: <a href="' + dataSource + '/wiki/' + titleURL + '" target="_blank">' + dataSource + '</p>';
+		windowBody = '<br><p>Source: <a href="' + dataSource + '/wiki/' + titleURL + '" target="_blank">' + dataSource + '</p><br>';
 		$('#'+newWindowId).find('.cSummary').append(windowBody);
 		
 		
@@ -413,30 +413,30 @@ function displaySummary(el)
 {	//toggle Summary
 	if(el.find('.cSummary').css('display') == 'none'){
 		el.find('.cSummary').css('display', 'block');
-		ga('send', 'event', 'window', 'summary', 'on');
+		ga('send', 'event', 'windowUI', 'summary', 'on');
 	} else {
 		el.find('.cSummary').css('display', 'none');
-		ga('send', 'event', 'window', 'summary', 'off');
+		ga('send', 'event', 'windowUI', 'summary', 'off');
 	}
 };
 function displayLinks(el)
 {	//toggle Links
 	if(el.find('.cLinks').css('display') == 'none'){
 		el.find('.cLinks').css('display', 'block');
-		ga('send', 'event', 'window', 'links', 'on');
+		ga('send', 'event', 'windowUI', 'links', 'on');
 	} else {
 		el.find('.cLinks').css('display', 'none');
-		ga('send', 'event', 'window', 'links', 'off');
+		ga('send', 'event', 'windowUI', 'links', 'off');
 	}
 };
 function displayMetaData(el)
 {	//toggle MetaData
 	if(el.find('.cMetaData').css('display') == 'none'){
 		el.find('.cMetaData').css('display', 'block');
-		ga('send', 'event', 'window', 'metaData', 'on');
+		ga('send', 'event', 'windowUI', 'metaData', 'on');
 	} else {
 		el.find('.cMetaData').css('display', 'none');
-		ga('send', 'event', 'window', 'metaData', 'off');
+		ga('send', 'event', 'windowUI', 'metaData', 'off');
 	}
 };
 
@@ -638,7 +638,7 @@ function formatMetadata(metadata)
 		outputHTML += '<tr><th>' + metadata[i].tag + '</th>';
 		outputHTML += '<td class="md' + metadata[i].tag + '">' + metadata[i].val + '</td></tr>';
 	}
-	outputHTML += '</table>';
+	outputHTML += '</table><br>';
 	
 	return outputHTML;
 };
@@ -656,7 +656,7 @@ function formatLinks(arrLink)
 		outputHTML +=  "<td>" + (i+1) + "</td>";
 		outputHTML +=  "<td>" + arrLink[i].weight + "</td></tr>";
 	}
-	outputHTML += '</table>';
+	outputHTML += '</table><br>';
 	
 	return outputHTML;
 };

@@ -32,6 +32,9 @@ function runTestDates(){
 	arrTestData.push({tag1: 'Years', val1: '1955-56', tag2: '', val2: ''});
 	arrTestData.push({tag1: 'Years', val1: '1955-6', tag2: '', val2: ''});
 	arrTestData.push({tag1: 'Years', val1: '1955-present', tag2: '', val2: ''});
+	arrTestData.push({tag1: 'Years', val1: '1955-1961, 1962-1999', tag2: '', val2: ''});
+	//arrTestData.push({tag1: 'Years', val1: '1964–1977, 1983–1999', tag2: '', val2: ''});
+	
 	
 	arrTestData.push({tag1: 'Born', val1: '1955', tag2: 'Died', val2: '1401 or 1397'});
 	arrTestData.push({tag1: 'Born', val1: '1955', tag2: 'Died', val2: '1401 or 1397 BC'});
@@ -393,62 +396,55 @@ function parseMetaData(article, windowId){
 	
 	//find start (birthday)
 	var bday = infobox.find('.bday:first').text();							//find the first bday class
-	if (bday == ''){
-		bday = infobox.find("th:containsCi('Born'):first").next().text();		//no class, perform text search
-	}
-	if (bday == ''){
-		bday = infobox.find("th:containsCi('Publication date'):first").next().text();		//books
-	}
-	if (bday == ''){
-		bday = infobox.find("th:containsCi('Release'):first").next().text();		//movie/album
-	}
-	if (bday == ''){
-		bday = infobox.find("th:containsCi('Created'):first").next().text();		
-	}
-	if (bday == ''){
-		bday = infobox.find("th:containsCi('Signed'):first").next().text();		
+	if (bday == ''){														//no class, perform text search
+		bday = ''+findDate(infobox, ['Born','Publication date','Published','Release','Created','Signed','Founded']);
 	}
 	//alert(bday);
 	
 	//find end (death day)
 	var dday = infobox.find('.dday:first').text();							//find the first dday class
-	if (dday == ''){
-		dday = infobox.find("th:containsCi('Died'):first").next().text();		//no class, perform text search
+	if (dday == ''){														//no class, perform text search	
+		dday = ''+findDate(infobox, ['Died']);
 	}
 	
-	//check for Year
+	//check for Year Range
 	if (bday == ''){
-		var year = infobox.find("th:containsCi('Year'):first").next().text();		//no class, perform text search
-		year = year.replace(/\u2013|\u2014/g, "-");			//change "en" and "em" dashes to hyphens "-"
-		var reYY = new RegExp(/\d+-\d+/);
-		var reNum = new RegExp(/\d+/);
-		var rePresent = new RegExp(/-present/i);
-		
-		if (reYY.test(year)){								//"yyyy-yyyy" range format
-			//alert('y: "' + year + '"');
-			bday = ''+reNum.exec(year.replace(/-.*/g, ""));
-			dday = ''+reNum.exec(year.replace(/.*-/g, ""));
-			var lengthDif = bday.length - dday.length;
-			if (lengthDif > 0){									// end year has less digits ("1970-82")
-				var reYearPrepend;
-				if (lengthDif == 1){							//HACK - could not get variables into a RegExp for some reason...
-					reYearPrepend = new RegExp(/\d{1}/);
-				} else if (lengthDif == 2){
-					reYearPrepend = new RegExp(/\d{2}/);
-				} else if (lengthDif == 3){
-					reYearPrepend = new RegExp(/\d{3}/);
-				} else {
-					reYearPrepend = new RegExp(/\d{4}/);
+		//var year = infobox.find("th:containsCi('Year'):first").next().text();		//no class, perform text search
+		var year = ''+findDate(infobox, ['Year','Production']);
+		if (year != '' && year != null) {
+			year = year.replace(/\u2012|\u2013|\u2014|\u2015/g, "-");			//change "en" and "em" dashes to hyphens "-"
+			var reYY = new RegExp(/\d+-\d+/);
+			var reNum = new RegExp(/\d+/);
+			var rePresent = new RegExp(/-present/i);
+			
+			year = year.replace(/,.*/g, "");	
+
+			if (reYY.test(year)){								//"yyyy-yyyy" range format
+				//alert('y: "' + year + '"');
+				bday = ''+reNum.exec(year.replace(/-.*/g, ""));
+				dday = ''+reNum.exec(year.replace(/.*-/g, ""));
+				var lengthDif = bday.length - dday.length;
+				if (lengthDif > 0){									// end year has less digits ("1970-82")
+					var reYearPrepend;
+					if (lengthDif == 1){							//HACK - could not get variables into a RegExp for some reason...
+						reYearPrepend = new RegExp(/\d{1}/);
+					} else if (lengthDif == 2){
+						reYearPrepend = new RegExp(/\d{2}/);
+					} else if (lengthDif == 3){
+						reYearPrepend = new RegExp(/\d{3}/);
+					} else {
+						reYearPrepend = new RegExp(/\d{4}/);
+					}
+					
+					dday = reYearPrepend.exec(bday) + dday;
+					//alert(lengthDif);
 				}
-				
-				dday = reYearPrepend.exec(bday) + dday;
-				//alert(lengthDif);
 			}
-		}
-		else {												//"yyyy" or "yyyy-present" format
-			bday = '' + reNum.exec(year);
-			if (rePresent.test(year)){
-				dday = 'present';
+			else {												//"yyyy" or "yyyy-present" format
+				bday = '' + reNum.exec(year);
+				if (rePresent.test(year)){
+					dday = 'present';
+				}
 			}
 		}
 	}
@@ -507,17 +503,15 @@ function findTag(tagName, arrSearch, metadata, data, windowId){
 };
 
 //perform text search on an array of key words.  return the matching value result
-function findDate(arrSearch){
+function findDate(data, arrSearch){
 /*	
 	arrSearch 	= array of keywords to search for
 */
 
-	var tagVal;
+	var tagVal = '';
 	for (i = 0, l = arrSearch.length; i < l; i++) {
-		tagVal = data.find("th:containsCi("+arrSearch[i]+"):first").next().html();	//look for the search term	
-
+		tagVal = ''+data.find("th:containsCi("+arrSearch[i]+"):first").next().text();	//look for the search term	
 		if (tagVal != '' && tagVal != null){						//tag found; exit loop (skip the rest of the search terms)
-			tagVal = internalLinks(tagVal, windowId);
 			break;
 		}
 	}
