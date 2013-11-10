@@ -221,6 +221,7 @@ a{
 	width:10px;
 	height:10px;
 	margin-right:5px;
+	cursor:pointer;
 }
 
 .buttonWindow{
@@ -280,7 +281,7 @@ table {
 .windowAbout{
 	left:5em;
 	top:5em;
-	display:none;
+	/*display:none;*/
 	z-index:3000;
 	opacity:1;
 	width:500px;

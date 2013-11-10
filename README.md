@@ -1,5 +1,7 @@
-lnkr
+LnkLnkr
 ====
+
+http://lnklnkr.com/
 
 an interactive browser based mind map for wikipedia
 

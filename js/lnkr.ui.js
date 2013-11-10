@@ -668,11 +668,11 @@ function formatWindow(dataSource, windowTitle, windowId)
 
 	//Add Buttons
 	var windowBody = '<div class="cButton">';
-	windowBody += '<img onclick="display1($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_title.png" />';
-	windowBody += '<img onclick="display4($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_icon.png" />';
-	windowBody += '<img onclick="display2($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_icon_title.png" />';
+	windowBody += '<img onclick="display1($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_title.png" title="Display Title"/>';
+	windowBody += '<img onclick="display4($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_icon.png" title="Display Image"/>';
+	windowBody += '<img onclick="display2($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_icon_title.png" title="Display Image + Title"/>';
 	//windowBody += '<img onclick="display3($(this).parents(&quot;.window&quot;));" class="buttonWindow" src="img/view_detail.png" />';
-	windowBody += '<img class="cButtonClose" onclick="closeWindow($(this).parents(&quot;.window&quot;));" src="img/Button_Icon_Red.svg.png" />';
+	windowBody += '<img class="cButtonClose" onclick="closeWindow($(this).parents(&quot;.window&quot;));" src="img/Button_Icon_Red.svg.png" title="Close"/>';
 	windowBody += '</div>';
 	
 	//Add Image container
