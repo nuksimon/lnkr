@@ -24,10 +24,11 @@ var zoom_level = 1;
 var zoom_level_min = 1;
 var zoom_level_max = 4;
 var zoom_detail_max = 2;
-var zoomScale = [1,0.75,0.55,0.4];
+var zoomScale = [1,0.75,0.55,0.4];			//px scaling for each zoom level								
+var pxArrange = {leftStart: 20, topStart: 50, left: 300, top: 350};		//px offsets for arrange functions
 
 
-//window.addEventListener("mousewheel",function(){
+
 document.getElementById('background').addEventListener("mousewheel",function(){
 	
 	var e = window.event
@@ -194,19 +195,14 @@ function backgroundDragMouseMove(){
 // grid
 function arrangeWindowGrid(){
 
-	//default spacing
-	var pxLeftStart = 20;	//starting offset
-	var pxTopStart = 80;
-	var pxLeft = 350;		//incremental offset
-	var pxTop = 450;
 	var gridWidth = 3;		//# of windows across
 	var i = 0;
 	//var zoomScale = [1,0.75,0.55,0.4];
 	
 	$('.window').each(function()
 	{
-		var posTop = (pxTopStart + Math.floor(i/gridWidth) * pxTop) * zoomScale[zoom_level-1];
-		var postLeft = (pxLeftStart + (i % gridWidth) * pxLeft) * zoomScale[zoom_level-1];
+		var posTop = (pxArrange.topStart + Math.floor(i/gridWidth) * pxArrange.top) * zoomScale[zoom_level-1];
+		var postLeft = (pxArrange.leftStart + (i % gridWidth) * pxArrange.left) * zoomScale[zoom_level-1];
 		$(this).offset({top: posTop , left: postLeft});
 		i++;
 	});
@@ -241,16 +237,9 @@ function arrangeWindowChrono(){
 	//chrononlogical sort
 	arrWindow.sort(SortByChrono);
 	
-	//default spacing
-	var pxLeftStart = 20;	//starting offset
-	var pxTopStart = 80;
-	var pxLeft = 350;		//incremental offset
-	var pxTop = 0;
-	//var zoomScale = [1,0.75,0.55,0.4];
-	
 	for (i = 0, l = arrWindow.length; i < l; i++) {
-		var posTop = (pxTopStart + (i * pxTop)) * zoomScale[zoom_level-1];
-		var postLeft = (pxLeftStart + (i * pxLeft)) * zoomScale[zoom_level-1];
+		var posTop = (pxArrange.topStart) * zoomScale[zoom_level-1];
+		var postLeft = (pxArrange.leftStart + (i * pxArrange.left)) * zoomScale[zoom_level-1];
 		$('#' + arrWindow[i].id).offset({top: posTop , left: postLeft});
 	}
 	

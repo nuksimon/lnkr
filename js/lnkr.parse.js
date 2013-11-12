@@ -433,18 +433,20 @@ function parseMetaData(article, windowId){
 	
 	//check for Year Range
 	if (bday == ''){
+		
 		//var year = infobox.find("th:containsCi('Year'):first").next().text();		//no class, perform text search
-		var year = ''+findDate(infobox, ['Year','Production']);
+		var year = ''+findDate(infobox, ['Year','Production','Date']);
+		//alert('year: "' + year + '"');
 		if (year != '' && year != null) {
 			year = year.replace(/\u2012|\u2013|\u2014|\u2015/g, "-");			//change "en" and "em" dashes to hyphens "-"
 			var reYY = new RegExp(/\d+-\d+/);
 			var reNum = new RegExp(/\d+/);
 			var rePresent = new RegExp(/-present/i);
 			
-			year = year.replace(/,.*/g, "");	
+			year = year.replace(/(,|\(|\n).*/g, "");	
 
 			if (reYY.test(year)){								//"yyyy-yyyy" range format
-				//alert('y: "' + year + '"');
+				//alert('y1: "' + year + '"');
 				bday = ''+reNum.exec(year.replace(/-.*/g, ""));
 				dday = ''+reNum.exec(year.replace(/.*-/g, ""));
 				var lengthDif = bday.length - dday.length;
@@ -464,14 +466,17 @@ function parseMetaData(article, windowId){
 					//alert(lengthDif);
 				}
 			}
-			else {												//"yyyy" or "yyyy-present" format
-				bday = '' + reNum.exec(year);
-				if (rePresent.test(year)){
-					dday = 'present';
+			else {												//"yyyy" or "yyyy-present" or "20 June 1234 - 23 April 1345" format
+				//alert('y3: "' + year + '"');
+				bday = ''+year.replace(/(-| to ).*/g, "").trim();
+				dday = ''+year.replace(/.*(-| to )/g, "").trim();
+				if (dday == bday){
+					dday = '';
 				}
 			}
 		}
 	}
+
 	
 
 	if (bday != '' && bday != null && bday.indexOf('null') == -1){
