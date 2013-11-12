@@ -10,4 +10,4 @@ related articles will have a link drawn between them, allowing the user to creat
 uses the Mediawiki API.
 written in java script and html.
 
-LnkLnkr.com runs off of the Lnkr library, which is licenced under GPL.  To obtain a copy of the licence visit http://www.gnu.org/licenses/
+The Lnkr library (developed for lnklnkr.com) is licenced under GPL.  To obtain a copy of the licence visit http://www.gnu.org/licenses/
