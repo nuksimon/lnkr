@@ -169,7 +169,9 @@ function createWindow(dataSource, windowTitle, sourceWindowId)
 		
 		
 		//Add Title
-		$('#'+newWindowId).find('h1').text(data['parse']['title']);
+		var windowTitle = data['parse']['title'];		//get the real title (from redirects)
+		$('#'+newWindowId).find('h1').text(windowTitle);
+		//$('#'+newWindowId).find('h1').text(data['parse']['title']);
 		$('#'+newWindowId).find('.loadWheel').remove();				//remove the loading wheel
 			
 		// Add Image
