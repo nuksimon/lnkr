@@ -418,7 +418,7 @@ function parseMetaData(article, windowId){
 		bday = infobox.find('.dtstart:first').text();	
 	}
 	if (bday == ''){														//no class, perform text search
-		bday = ''+findDate(infobox, ['Born','Publication date','Published','Release','Created','Signed','Founded']);
+		bday = ''+findDate(infobox, ['Born','Publication date','Published','Release','Created','Signed','Founded','Established']);
 	}
 	//alert(bday);
 	
@@ -443,7 +443,7 @@ function parseMetaData(article, windowId){
 			var reNum = new RegExp(/\d+/);
 			var rePresent = new RegExp(/-present/i);
 			
-			year = year.replace(/(,|\(|\n).*/g, "");	
+			year = year.replace(/(\(|\n).*/g, "");	
 
 			if (reYY.test(year)){								//"yyyy-yyyy" range format
 				//alert('y1: "' + year + '"');

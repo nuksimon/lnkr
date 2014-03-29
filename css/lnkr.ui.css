@@ -52,6 +52,7 @@ html, body {
     width: 100%;
 }
 #header{
+	z-index:2000;
 	display: table-row;
 	background-color: white;
 	opacity:1;

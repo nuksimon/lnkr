@@ -43,3 +43,33 @@ for each hyperlink
 for each word matching a hyperlink
 	count++
 output - array contents (hyperlink + counts)
+
+
+
+-------------------------------------------------------------------------------
+
+
+video:
+
+LnkLnkr is a visual way to learn.  
+Searches return a draggable window with an iconic image and title
+They are also full of information directly from Wikipedia
+
+We highlight the most relevant links within the article
+And pull out any tagged metadata
+
+Clicking a link will open a new window and draw a line between them, 
+	so you can literally see the connection
+
+Open multiple windows to build a mind map view 
+	and understand the interconnectedness of the articles
+
+Zoom out and drag the background to get a high level view
+
+Use the Timeline to understand the historical relationship
+
+Re-arange articles on the screen and learn about new topics
+
+Different display settings will help you visually manage the content
+
+And most importantly, have fun learning!
